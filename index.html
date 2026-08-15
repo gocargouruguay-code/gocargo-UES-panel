@@ -27,6 +27,7 @@
 
 <div id="login" class="card">
   <h1>Go Cargo / UES panel</h1>
+  <div id="countBadge" style="margin: 8px 0; font-size: 0.95rem;">Consultando casos pendientes...</div>
   <label>Contraseña</label>
   <input type="text" id="password" />
   <button onclick="login()">Entrar</button>
@@ -49,6 +50,29 @@
 const API_BASE = "https://fksbytkpdbcjbwakunpp.supabase.co/functions/v1/ues-admin";
 
 let PASSWORD = "";
+
+// Se ejecuta apenas carga la página, SIN necesidad de contraseña —
+// solo trae un número, para poder avisar de un vistazo si hay algo
+// para revisar antes de loguearse.
+async function consultarConteo() {
+  const badgeEl = document.getElementById("countBadge");
+  try {
+    const res = await fetch(API_BASE + "?action=count");
+    const data = await res.json();
+    const n = data.count ?? 0;
+
+    if (n === 0) {
+      badgeEl.innerHTML = '<div class="msg ok">✅ No hay casos pendientes</div>';
+      document.title = "Go Cargo / UES panel";
+    } else {
+      badgeEl.innerHTML = `<div class="msg err">⚠️ ${n} caso${n === 1 ? "" : "s"} pendiente${n === 1 ? "" : "s"} de revisión</div>`;
+      document.title = `(${n}) Go Cargo / UES panel`;
+    }
+  } catch (e) {
+    badgeEl.innerHTML = '<div class="msg err">No se pudo consultar el estado</div>';
+  }
+}
+consultarConteo();
 
 function login() {
   PASSWORD = document.getElementById("password").value;
