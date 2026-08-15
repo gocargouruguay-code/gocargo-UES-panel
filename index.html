@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Go Cargo / UES panel</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; background: #f7f7f8; color: #1a1a1a; }
+  h1 { font-size: 1.4rem; }
+  .card { background: white; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .motivo { color: #b45309; font-weight: 600; margin-bottom: 8px; }
+  .order-code { font-family: monospace; font-size: 1.1rem; }
+  label { display: block; margin-top: 10px; font-size: 0.9rem; color: #555; }
+  input[type=text] { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+  button { margin-top: 12px; padding: 8px 16px; background: #1a1a2e; color: white; border: none; border-radius: 4px; cursor: pointer; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  #login { max-width: 320px; margin: 100px auto; }
+  #app { display: none; }
+  .empty { color: #888; text-align: center; padding: 40px 0; }
+  .msg { padding: 8px; border-radius: 4px; margin-top: 8px; font-size: 0.9rem; }
+  .msg.ok { background: #dcfce7; color: #166534; }
+  .msg.err { background: #fee2e2; color: #991b1b; }
+  #refreshBtn { background: transparent; color: #1a1a2e; border: 1px solid #1a1a2e; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<div id="login" class="card">
+  <h1>Go Cargo / UES panel</h1>
+  <label>Contraseña</label>
+  <input type="text" id="password" />
+  <button onclick="login()">Entrar</button>
+  <div id="loginMsg"></div>
+</div>
+
+<div id="app">
+  <h1>Go Cargo / UES panel — Envíos pendientes</h1>
+  <button id="refreshBtn" onclick="cargarLista()">↻ Actualizar</button>
+  <div id="list"></div>
+</div>
+
+<script>
+// IMPORTANTE: esta página es un archivo standalone (no vive en
+// Supabase) — se abre directo desde el explorador de archivos
+// (doble click) o desde cualquier hosting simple. Esto evita el
+// sandboxing que Supabase aplica automáticamente a HTML servido desde
+// un dominio de Edge Function.
+
+const API_BASE = "https://fksbytkpdbcjbwakunpp.supabase.co/functions/v1/ues-admin";
+
+let PASSWORD = "";
+
+function login() {
+  PASSWORD = document.getElementById("password").value;
+  cargarLista();
+}
+
+async function cargarLista() {
+  let res;
+  try {
+    res = await fetch(API_BASE + "?action=list", {
+      headers: { "X-Admin-Password": PASSWORD },
+    });
+  } catch (e) {
+    document.getElementById("loginMsg").innerHTML =
+      '<div class="msg err">No se pudo conectar: ' + e.message + '</div>';
+    return;
+  }
+
+  if (res.status === 401) {
+    document.getElementById("loginMsg").innerHTML =
+      '<div class="msg err">Contraseña incorrecta</div>';
+    return;
+  }
+
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
+
+  const items = await res.json();
+  const listEl = document.getElementById("list");
+
+  if (items.length === 0) {
+    listEl.innerHTML = '<div class="empty">No hay casos pendientes 🎉</div>';
+    return;
+  }
+
+  listEl.innerHTML = items.map((item) => {
+    const necesitaTelefono = item.motivo.includes("teléfono");
+    return `
+      <div class="card" id="item-${item.id}">
+        <div class="order-code">${item.order_code}</div>
+        <div class="motivo">${item.motivo}</div>
+        ${necesitaTelefono ? `
+          <label>Teléfono del destinatario (ej. 099123123)</label>
+          <input type="text" id="telefono-${item.id}" placeholder="099123123" />
+          <button onclick="completarTelefono(${item.id})">Completar y crear envío</button>
+        ` : `
+          <div style="color:#888; font-size:0.85rem;">
+            Este caso requiere revisión manual directa (no es un dato completable desde acá) — revisar en Sendground/UES.
+          </div>
+        `}
+        <div id="msg-${item.id}"></div>
+      </div>
+    `;
+  }).join("");
+}
+
+async function completarTelefono(id) {
+  const telefono = document.getElementById("telefono-" + id).value.trim();
+  const msgEl = document.getElementById("msg-" + id);
+
+  if (!telefono) {
+    msgEl.innerHTML = '<div class="msg err">Ingresá un teléfono</div>';
+    return;
+  }
+
+  msgEl.innerHTML = '<div class="msg">Creando envío...</div>';
+
+  const res = await fetch(API_BASE + "?action=complete", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Admin-Password": PASSWORD,
+    },
+    body: JSON.stringify({ id, telefono }),
+  });
+
+  const data = await res.json();
+
+  if (res.ok) {
+    msgEl.innerHTML = '<div class="msg ok">Envío creado: ' + data.trackingNumber + '</div>';
+    setTimeout(() => document.getElementById("item-" + id).remove(), 1500);
+  } else {
+    msgEl.innerHTML = '<div class="msg err">Error: ' + data.error + '</div>';
+  }
+}
+</script>
+</body>
+</html>
