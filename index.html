@@ -29,7 +29,7 @@
   <h1>Go Cargo / UES panel</h1>
   <div id="countBadge" style="margin: 8px 0; font-size: 0.95rem;">Consultando casos pendientes...</div>
   <label>Contraseña</label>
-  <input type="text" id="password" />
+  <input type="password" id="password" autocomplete="current-password" />
   <button onclick="login()">Entrar</button>
   <div id="loginMsg"></div>
 </div>
@@ -75,9 +75,13 @@ async function consultarConteo() {
 consultarConteo();
 
 function login() {
-  PASSWORD = document.getElementById("password").value;
+  PASSWORD = document.getElementById("password").value.trim();
   cargarLista();
 }
+
+document.getElementById("password").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") login();
+});
 
 async function cargarLista() {
   let res;
@@ -109,7 +113,7 @@ async function cargarLista() {
   }
 
   listEl.innerHTML = items.map((item) => {
-    const necesitaTelefono = item.motivo.includes("teléfono");
+    const necesitaTelefono = String(item.motivo ?? "").toLowerCase().includes("teléfono");
     return `
       <div class="card" id="item-${item.id}">
         <div class="order-code">${item.order_code}</div>
@@ -152,7 +156,7 @@ async function completarTelefono(id) {
   const data = await res.json();
 
   if (res.ok) {
-    msgEl.innerHTML = '<div class="msg ok">Envío creado: ' + data.trackingNumber + '</div>';
+    msgEl.innerHTML = '<div class="msg ok">Envío creado: ' + data.trackingNumber + (data.warning ? '<br>⚠️ ' + data.warning : '') + '</div>';
     setTimeout(() => document.getElementById("item-" + id).remove(), 1500);
   } else {
     msgEl.innerHTML = '<div class="msg err">Error: ' + data.error + '</div>';
