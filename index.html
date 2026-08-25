@@ -11,7 +11,7 @@
   .motivo { color: #b45309; font-weight: 600; margin-bottom: 8px; }
   .order-code { font-family: monospace; font-size: 1.1rem; }
   label { display: block; margin-top: 10px; font-size: 0.9rem; color: #555; }
-  input[type=text] { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+  input[type=text], input[type=password] { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
   button { margin-top: 12px; padding: 8px 16px; background: #1a1a2e; color: white; border: none; border-radius: 4px; cursor: pointer; }
   button:disabled { opacity: 0.5; cursor: not-allowed; }
   #login { max-width: 320px; margin: 100px auto; }
@@ -29,7 +29,7 @@
   <h1>Go Cargo / UES panel</h1>
   <div id="countBadge" style="margin: 8px 0; font-size: 0.95rem;">Consultando casos pendientes...</div>
   <label>Contraseña</label>
-  <input type="password" id="password" autocomplete="current-password" />
+  <input type="password" id="password" autocomplete="current-password" autofocus />
   <button onclick="login()">Entrar</button>
   <div id="loginMsg"></div>
 </div>
@@ -51,6 +51,15 @@ const API_BASE = "https://fksbytkpdbcjbwakunpp.supabase.co/functions/v1/ues-admi
 
 let PASSWORD = "";
 
+function esc(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 // Se ejecuta apenas carga la página, SIN necesidad de contraseña —
 // solo trae un número, para poder avisar de un vistazo si hay algo
 // para revisar antes de loguearse.
@@ -59,8 +68,9 @@ async function consultarConteo() {
   try {
     const res = await fetch(API_BASE + "?action=count");
     const data = await res.json();
-    const n = data.count ?? 0;
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
 
+    const n = Number(data.count ?? 0);
     if (n === 0) {
       badgeEl.innerHTML = '<div class="msg ok">✅ No hay casos pendientes</div>';
       document.title = "Go Cargo / UES panel";
@@ -68,14 +78,14 @@ async function consultarConteo() {
       badgeEl.innerHTML = `<div class="msg err">⚠️ ${n} caso${n === 1 ? "" : "s"} pendiente${n === 1 ? "" : "s"} de revisión</div>`;
       document.title = `(${n}) Go Cargo / UES panel`;
     }
-  } catch (e) {
+  } catch {
     badgeEl.innerHTML = '<div class="msg err">No se pudo consultar el estado</div>';
   }
 }
 consultarConteo();
 
 function login() {
-  PASSWORD = document.getElementById("password").value.trim();
+  PASSWORD = document.getElementById("password").value;
   cargarLista();
 }
 
@@ -85,13 +95,15 @@ document.getElementById("password").addEventListener("keydown", (e) => {
 
 async function cargarLista() {
   let res;
+  let items;
   try {
     res = await fetch(API_BASE + "?action=list", {
       headers: { "X-Admin-Password": PASSWORD },
     });
+    items = await res.json();
   } catch (e) {
     document.getElementById("loginMsg").innerHTML =
-      '<div class="msg err">No se pudo conectar: ' + e.message + '</div>';
+      '<div class="msg err">No se pudo conectar: ' + esc(e.message) + '</div>';
     return;
   }
 
@@ -100,11 +112,16 @@ async function cargarLista() {
       '<div class="msg err">Contraseña incorrecta</div>';
     return;
   }
+  if (!res.ok || !Array.isArray(items)) {
+    document.getElementById("loginMsg").innerHTML =
+      '<div class="msg err">Error del panel: ' + esc(items?.error || `HTTP ${res.status}`) + '</div>';
+    return;
+  }
 
+  document.getElementById("loginMsg").innerHTML = "";
   document.getElementById("login").style.display = "none";
   document.getElementById("app").style.display = "block";
 
-  const items = await res.json();
   const listEl = document.getElementById("list");
 
   if (items.length === 0) {
@@ -116,8 +133,8 @@ async function cargarLista() {
     const necesitaTelefono = String(item.motivo ?? "").toLowerCase().includes("teléfono");
     return `
       <div class="card" id="item-${item.id}">
-        <div class="order-code">${item.order_code}</div>
-        <div class="motivo">${item.motivo}</div>
+        <div class="order-code">${esc(item.order_code)}</div>
+        <div class="motivo">${esc(item.motivo)}</div>
         ${necesitaTelefono ? `
           <label>Teléfono del destinatario (ej. 099123123)</label>
           <input type="text" id="telefono-${item.id}" placeholder="099123123" />
@@ -144,22 +161,28 @@ async function completarTelefono(id) {
 
   msgEl.innerHTML = '<div class="msg">Creando envío...</div>';
 
-  const res = await fetch(API_BASE + "?action=complete", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Admin-Password": PASSWORD,
-    },
-    body: JSON.stringify({ id, telefono }),
-  });
+  try {
+    const res = await fetch(API_BASE + "?action=complete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Admin-Password": PASSWORD,
+      },
+      body: JSON.stringify({ id, telefono }),
+    });
 
-  const data = await res.json();
-
-  if (res.ok) {
-    msgEl.innerHTML = '<div class="msg ok">Envío creado: ' + data.trackingNumber + (data.warning ? '<br>⚠️ ' + data.warning : '') + '</div>';
-    setTimeout(() => document.getElementById("item-" + id).remove(), 1500);
-  } else {
-    msgEl.innerHTML = '<div class="msg err">Error: ' + data.error + '</div>';
+    const data = await res.json();
+    if (res.ok) {
+      msgEl.innerHTML = '<div class="msg ok">Envío creado: ' + esc(data.trackingNumber ?? data.detalle ?? 'OK') + (data.warning ? '<br>⚠️ ' + esc(data.warning) : '') + '</div>';
+      setTimeout(() => {
+        document.getElementById("item-" + id)?.remove();
+        consultarConteo();
+      }, 1500);
+    } else {
+      msgEl.innerHTML = '<div class="msg err">Error: ' + esc(data.error || `HTTP ${res.status}`) + '</div>';
+    }
+  } catch (e) {
+    msgEl.innerHTML = '<div class="msg err">No se pudo conectar: ' + esc(e.message) + '</div>';
   }
 }
 </script>
