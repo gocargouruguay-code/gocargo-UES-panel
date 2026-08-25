@@ -3,188 +3,185 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Go Cargo / UES panel</title>
+<title>GoCargo / UES — Torre de control</title>
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; background: #f7f7f8; color: #1a1a1a; }
-  h1 { font-size: 1.4rem; }
-  .card { background: white; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-  .motivo { color: #b45309; font-weight: 600; margin-bottom: 8px; }
-  .order-code { font-family: monospace; font-size: 1.1rem; }
-  label { display: block; margin-top: 10px; font-size: 0.9rem; color: #555; }
-  input[type=text], input[type=password] { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-  button { margin-top: 12px; padding: 8px 16px; background: #1a1a2e; color: white; border: none; border-radius: 4px; cursor: pointer; }
-  button:disabled { opacity: 0.5; cursor: not-allowed; }
-  #login { max-width: 320px; margin: 100px auto; }
-  #app { display: none; }
-  .empty { color: #888; text-align: center; padding: 40px 0; }
-  .msg { padding: 8px; border-radius: 4px; margin-top: 8px; font-size: 0.9rem; }
-  .msg.ok { background: #dcfce7; color: #166534; }
-  .msg.err { background: #fee2e2; color: #991b1b; }
-  #refreshBtn { background: transparent; color: #1a1a2e; border: 1px solid #1a1a2e; margin-bottom: 16px; }
+:root {
+  --navy:#00275B; --blue:#0b5ea8; --bg:#f3f6fa; --card:#fff; --text:#172033;
+  --muted:#687386; --line:#dfe6ee; --green:#15803d; --green-bg:#eaf8ef;
+  --yellow:#a16207; --yellow-bg:#fff7db; --red:#b42318; --red-bg:#fff0ee;
+  --shadow:0 8px 28px rgba(19,40,70,.08);
+}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit}.hidden{display:none!important}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.muted{color:var(--muted)}
+.topbar{background:var(--navy);color:white;padding:16px 22px;position:sticky;top:0;z-index:20;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+.topbar-inner{max-width:1280px;margin:auto;display:flex;align-items:center;gap:14px}.brand{font-weight:800;font-size:20px;letter-spacing:.2px}.brand small{font-weight:500;opacity:.72;font-size:12px;margin-left:8px}
+.spacer{flex:1}.top-status{display:flex;align-items:center;gap:8px;font-size:13px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:#94a3b8}.dot.green{background:#22c55e}.dot.yellow{background:#f59e0b}.dot.red{background:#ef4444}
+.container{max-width:1280px;margin:24px auto;padding:0 18px 48px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+#login{max-width:420px;margin:80px auto;padding:28px}.login-title{font-size:23px;font-weight:800;color:var(--navy);margin-bottom:4px}.login-sub{color:var(--muted);margin-bottom:18px}
+label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:12px 0 5px}.input{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:10px 12px;background:white;outline:none}.input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,94,168,.10)}
+.btn{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:700;transition:.15s}.btn:hover{transform:translateY(-1px)}.btn.primary{background:var(--navy);color:#fff}.btn.secondary{background:#eef3f8;color:var(--navy)}.btn.danger{background:var(--red-bg);color:var(--red)}.btn.small{font-size:12px;padding:7px 9px}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}.wide{width:100%;margin-top:14px}
+.alert{padding:10px 12px;border-radius:9px;font-size:13px;margin-top:10px}.alert.ok{background:var(--green-bg);color:var(--green)}.alert.warn{background:var(--yellow-bg);color:var(--yellow)}.alert.err{background:var(--red-bg);color:var(--red)}
+.hero{display:flex;align-items:flex-start;gap:18px;margin-bottom:18px}.hero h1{font-size:25px;margin:0;color:var(--navy)}.hero p{margin:5px 0 0;color:var(--muted)}.hero-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.metrics{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:12px;margin-bottom:16px}.metric{padding:16px}.metric .value{font-size:28px;font-weight:850;color:var(--navy)}.metric .label{font-size:12px;color:var(--muted);margin-top:2px}.metric.warn .value{color:var(--yellow)}.metric.err .value{color:var(--red)}.metric.ok .value{color:var(--green)}
+.health-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}.health-card{padding:15px}.health-head{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--navy)}.health-meta{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.55}.health-error{font-size:12px;color:var(--red);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.section{margin-top:18px}.section-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}.section-head h2{font-size:17px;margin:0;color:var(--navy)}.section-head .count{font-size:11px;padding:3px 7px;background:#e7eef6;border-radius:999px;color:var(--navy);font-weight:800}
+.search-card{padding:14px;margin-bottom:18px}.search-row{display:flex;gap:8px}.search-row .input{font-size:15px}.search-results{display:grid;gap:7px;margin-top:10px}.search-result{border:1px solid var(--line);border-radius:9px;padding:10px 12px;cursor:pointer;display:flex;gap:12px;align-items:center;background:#fff}.search-result:hover{border-color:#aac1d8;background:#f9fbfd}.search-result .code{font-weight:850;color:var(--navy)}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;margin-bottom:10px}.queue{display:grid;gap:10px}.review{padding:14px;display:grid;grid-template-columns:170px 1fr auto;gap:14px;align-items:start}.review-code{font-weight:850;color:var(--navy);cursor:pointer}.review-event{font-size:12px;color:var(--muted);margin-top:4px}.review-motivo{font-size:13px;font-weight:650;color:#6b4b0b;line-height:1.45}.review-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.phone-row{display:flex;gap:6px;margin-top:9px;max-width:380px}.phone-row .input{padding:7px 9px;font-size:12px}
+.badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800}.badge.green{background:var(--green-bg);color:var(--green)}.badge.yellow{background:var(--yellow-bg);color:var(--yellow)}.badge.red{background:var(--red-bg);color:var(--red)}.badge.gray{background:#eef2f6;color:#64748b}.badge.blue{background:#eaf2fb;color:var(--blue)}
+.empty{text-align:center;color:var(--muted);padding:38px 10px}.footer-note{text-align:center;color:#94a3b8;font-size:11px;margin-top:22px}
+.modal-backdrop{position:fixed;inset:0;background:rgba(10,24,44,.46);z-index:50;display:flex;justify-content:flex-end}.drawer{width:min(780px,96vw);height:100%;background:#f7f9fc;overflow:auto;box-shadow:-8px 0 30px rgba(0,0,0,.16)}.drawer-head{position:sticky;top:0;background:white;border-bottom:1px solid var(--line);padding:17px 18px;z-index:2;display:flex;align-items:center;gap:10px}.drawer-head h2{margin:0;color:var(--navy);font-size:20px}.drawer-body{padding:16px}.close{margin-left:auto;background:#eef2f6;color:#334155;border:0;border-radius:9px;width:34px;height:34px;cursor:pointer;font-size:19px}
+.detail-actions{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px}.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.detail-card{padding:13px}.detail-title{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}.kv{display:grid;grid-template-columns:120px 1fr;gap:5px 8px;font-size:12px;line-height:1.35}.kv .k{color:var(--muted)}.kv .v{font-weight:650;word-break:break-word}
+.pod-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.pod-item{border:1px solid var(--line);border-radius:9px;padding:9px;text-align:center;font-size:11px}.pod-item.ok{background:var(--green-bg);color:var(--green);border-color:#bfe5ca}.pod-item.miss{background:var(--red-bg);color:var(--red);border-color:#f1c6c1}
+.timeline{position:relative;margin-left:6px;padding-left:18px;border-left:2px solid #d9e3ed}.event{position:relative;padding:0 0 14px 3px}.event:before{content:"";position:absolute;left:-24px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--blue);border:2px solid white;box-shadow:0 0 0 1px #b8cadb}.event-title{font-size:13px;font-weight:800}.event-sub{font-size:12px;color:var(--muted);margin-top:2px}.event-note{font-size:12px;margin-top:3px}.tabs{display:flex;gap:6px;margin:14px 0 9px}.tab{background:#e8eef5;color:#475569}.tab.active{background:var(--navy);color:white}.json-box{background:#101827;color:#d5e0ef;border-radius:10px;padding:12px;font-size:11px;overflow:auto;max-height:400px;white-space:pre-wrap;word-break:break-word}
+.toast{position:fixed;right:18px;bottom:18px;z-index:100;background:#172033;color:#fff;padding:11px 14px;border-radius:10px;box-shadow:var(--shadow);font-size:13px;max-width:360px}
+@media(max-width:980px){.metrics{grid-template-columns:repeat(3,1fr)}.health-grid,.detail-grid{grid-template-columns:1fr}.review{grid-template-columns:1fr}.review-actions{justify-content:flex-start}.filters{grid-template-columns:1fr 1fr}.pod-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.metrics{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr}.hero{display:block}.hero-actions{margin-top:10px}.topbar .brand small{display:none}.search-row{flex-direction:column}.detail-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+<div class="topbar"><div class="topbar-inner"><div class="brand">GoCargo <small>Integración UES</small></div><div class="spacer"></div><div id="topStatus" class="top-status"><span class="dot"></span><span>Sin conectar</span></div></div></div>
 
-<div id="login" class="card">
-  <h1>Go Cargo / UES panel</h1>
-  <div id="countBadge" style="margin: 8px 0; font-size: 0.95rem;">Consultando casos pendientes...</div>
-  <label>Contraseña</label>
-  <input type="password" id="password" autocomplete="current-password" autofocus />
-  <button onclick="login()">Entrar</button>
-  <div id="loginMsg"></div>
+<div class="container">
+  <div id="login" class="card">
+    <div class="login-title">Torre de control</div>
+    <div class="login-sub">Monitoreo, revisión y diagnóstico de la integración.</div>
+    <div id="countBadge">Consultando casos pendientes…</div>
+    <label>Contraseña</label>
+    <input class="input" type="password" id="password" autocomplete="current-password" autofocus />
+    <button class="btn primary wide" id="loginBtn" onclick="login()">Entrar</button>
+    <div id="loginMsg"></div>
+  </div>
+
+  <main id="app" class="hidden">
+    <div class="hero">
+      <div><h1>GoCargo / UES</h1><p>Estado operativo y revisión de pedidos en una sola pantalla.</p></div>
+      <div class="hero-actions"><button class="btn secondary" onclick="refrescarTodo()">↻ Actualizar</button><button class="btn secondary" onclick="probarUES()">Probar conexión UES</button></div>
+    </div>
+
+    <div id="metrics" class="metrics"></div>
+    <div id="health" class="health-grid"></div>
+
+    <div class="card search-card">
+      <div class="search-row"><input id="globalSearch" class="input" placeholder="Buscar ORD…, guía UES… o tracking…" onkeydown="if(event.key==='Enter') buscarGlobal()" /><button class="btn primary" onclick="buscarGlobal()">Buscar</button></div>
+      <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <section class="section">
+      <div class="section-head"><h2>Requieren atención</h2><span id="reviewCount" class="count">0</span></div>
+      <div class="filters">
+        <input id="filterText" class="input" placeholder="Filtrar por orden, evento o motivo…" oninput="renderReviews()" />
+        <select id="filterType" class="input" onchange="renderReviews()"><option value="all">Todos los motivos</option><option value="telefono">Teléfono</option><option value="transicion">Transición</option><option value="creacion">Creación / proxy</option><option value="regla">Sin regla</option><option value="otros">Otros</option></select>
+        <select id="filterAge" class="input" onchange="renderReviews()"><option value="all">Cualquier antigüedad</option><option value="green">Menos de 6 h</option><option value="yellow">6 a 24 h</option><option value="red">Más de 24 h</option></select>
+        <button class="btn secondary" onclick="cargarReviews()">↻</button>
+      </div>
+      <div id="reviewList" class="queue"></div>
+    </section>
+    <div class="footer-note">El panel no modifica estados automáticamente salvo cuando elegís explícitamente una acción administrativa.</div>
+  </main>
 </div>
 
-<div id="app">
-  <h1>Go Cargo / UES panel — Envíos pendientes</h1>
-  <button id="refreshBtn" onclick="cargarLista()">↻ Actualizar</button>
-  <div id="list"></div>
-</div>
+<div id="detailModal" class="modal-backdrop hidden" onclick="if(event.target===this) cerrarDetalle()"><div class="drawer"><div class="drawer-head"><h2 id="detailTitle">Pedido</h2><span id="detailStatus"></span><button class="close" onclick="cerrarDetalle()">×</button></div><div id="detailBody" class="drawer-body"></div></div></div>
+<div id="toast" class="toast hidden"></div>
 
 <script>
-// IMPORTANTE: esta página es un archivo standalone (no vive en
-// Supabase) — se abre directo desde el explorador de archivos
-// (doble click) o desde cualquier hosting simple. Esto evita el
-// sandboxing que Supabase aplica automáticamente a HTML servido desde
-// un dominio de Edge Function.
-
 const API_BASE = "https://fksbytkpdbcjbwakunpp.supabase.co/functions/v1/ues-admin";
-
 let PASSWORD = "";
+let REVIEWS = [];
+let DASHBOARD = null;
+let CURRENT_DETAIL = null;
+let autoTimer = null;
 
-function esc(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
+const esc = (v) => String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
+const fmt = (v) => { if(!v) return "—"; const d=new Date(v); return Number.isNaN(d.getTime())?esc(v):new Intl.DateTimeFormat("es-UY",{dateStyle:"short",timeStyle:"medium",timeZone:"America/Montevideo"}).format(d); };
+const norm = (v) => String(v??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
 
-// Se ejecuta apenas carga la página, SIN necesidad de contraseña —
-// solo trae un número, para poder avisar de un vistazo si hay algo
-// para revisar antes de loguearse.
-async function consultarConteo() {
-  const badgeEl = document.getElementById("countBadge");
-  try {
-    const res = await fetch(API_BASE + "?action=count");
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.remove("hidden");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.add("hidden"),2600)}
+async function api(action,{method="GET",body=null,query={}}={}){const qs=new URLSearchParams({action,...query});const res=await fetch(API_BASE+"?"+qs,{method,headers:{...(PASSWORD?{"X-Admin-Password":PASSWORD}:{}),...(body?{"Content-Type":"application/json"}:{})},body:body?JSON.stringify(body):null});let data;try{data=await res.json()}catch{data={error:`HTTP ${res.status}`}}if(!res.ok)throw Object.assign(new Error(data.error||`HTTP ${res.status}`),{status:res.status,data});return data}
 
-    const n = Number(data.count ?? 0);
-    if (n === 0) {
-      badgeEl.innerHTML = '<div class="msg ok">✅ No hay casos pendientes</div>';
-      document.title = "Go Cargo / UES panel";
-    } else {
-      badgeEl.innerHTML = `<div class="msg err">⚠️ ${n} caso${n === 1 ? "" : "s"} pendiente${n === 1 ? "" : "s"} de revisión</div>`;
-      document.title = `(${n}) Go Cargo / UES panel`;
-    }
-  } catch {
-    badgeEl.innerHTML = '<div class="msg err">No se pudo consultar el estado</div>';
-  }
-}
+async function consultarConteo(){const el=document.getElementById("countBadge");try{const r=await api("count");const n=Number(r.count||0);el.innerHTML=n?`<div class="alert warn">⚠ ${n} caso${n===1?"":"s"} pendiente${n===1?"":"s"} de revisión</div>`:'<div class="alert ok">✓ No hay casos pendientes</div>';document.title=n?`(${n}) GoCargo / UES`:'GoCargo / UES — Torre de control'}catch{el.innerHTML='<div class="alert err">No se pudo consultar el estado</div>'}}
 consultarConteo();
+document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
 
-function login() {
-  PASSWORD = document.getElementById("password").value;
-  cargarLista();
+async function login(){PASSWORD=document.getElementById("password").value;const btn=document.getElementById("loginBtn");btn.disabled=true;document.getElementById("loginMsg").innerHTML="";try{await cargarDashboard();document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");await cargarReviews();autoTimer=setInterval(()=>cargarDashboard(true),60000)}catch(e){document.getElementById("loginMsg").innerHTML=`<div class="alert err">${e.status===401?"Contraseña incorrecta":esc(e.message)}</div>`}finally{btn.disabled=false}}
+
+function componentState(h){if(!h)return {c:"gray",t:"Sin datos"};const err=h.last_error_at?new Date(h.last_error_at):null;const ok=h.last_success_at?new Date(h.last_success_at):null;if(err&&(!ok||err>ok))return {c:"red",t:"Error"};if(ok)return {c:"green",t:"Operativo"};return {c:"yellow",t:"Esperando primera ejecución"}}
+function metric(label,value,cls=""){return `<div class="card metric ${cls}"><div class="value">${esc(value)}</div><div class="label">${esc(label)}</div></div>`}
+
+async function cargarDashboard(silent=false){try{DASHBOARD=await api("dashboard");renderDashboard()}catch(e){if(!silent)throw e;document.getElementById("topStatus").innerHTML='<span class="dot red"></span><span>Error de panel</span>'}}
+function renderDashboard(){const m=DASHBOARD.metrics||{};document.getElementById("metrics").innerHTML=[metric("Pedidos abiertos",m.abiertos||0),metric("Entregados hoy",m.entregadosHoy||0,"ok"),metric("Revisión pendiente",m.revisionPendiente||0,(m.revisionPendiente||0)?"warn":""),metric("Errores 24 h",m.errores24h||0,(m.errores24h||0)?"err":""),metric("Webhooks recibidos hoy",m.webhooksRecibidosHoy||0),metric("POD incompletos hoy",m.podIncompletosHoy||0,(m.podIncompletosHoy||0)?"warn":"")].join("");
+ const hb=Object.fromEntries((DASHBOARD.heartbeats||[]).map(x=>[x.component,x]));const comps=[["ues-webhook","Webhook","Tiempo real / 24×7"],["ues-proxy","Creación de guías","14:00–19:45 / 15 min"],["ues-poller","Poller de respaldo","22:00 / diario"]];let anyRed=false;document.getElementById("health").innerHTML=comps.map(([key,title,schedule])=>{const h=hb[key];const st=componentState(h);if(st.c==="red")anyRed=true;const last= key==="ues-webhook"&&DASHBOARD.ultimoWebhook?DASHBOARD.ultimoWebhook.received_at:h?.last_success_at;const capacity=key==="ues-poller"&&m.pollerCapacidadSuperada?`<div class="alert warn" style="margin-top:8px">⚠ ${esc(m.abiertos)} pedidos abiertos; el poller actual procesa como máximo ${esc(m.pollerMaxPedidosPorCorrida)} por corrida.</div>`:"";return `<div class="card health-card"><div class="health-head"><span class="dot ${st.c}"></span>${title}<span class="badge ${st.c}">${st.t}</span></div><div class="health-meta">Última actividad: <b>${fmt(last)}</b><br>Programación: ${schedule}${key==="ues-webhook"&&DASHBOARD.ultimoWebhook?`<br>Último evento: <b>${esc(DASHBOARD.ultimoWebhook.evento_nombre||"—")}</b> · ${esc(DASHBOARD.ultimoWebhook.order_code||DASHBOARD.ultimoWebhook.tracking_number||"sin mapeo")}`:""}</div>${h?.last_error?`<div class="health-error" title="${esc(h.last_error)}">${esc(h.last_error)}</div>`:""}${capacity}</div>`}).join("");
+ const warn=(m.revisionPendiente||0)>0||(m.errores24h||0)>0||(m.podIncompletosHoy||0)>0||m.pollerCapacidadSuperada;document.getElementById("topStatus").innerHTML=anyRed?'<span class="dot red"></span><span>Requiere atención</span>':warn?'<span class="dot yellow"></span><span>Operativo con alertas</span>':'<span class="dot green"></span><span>Operativo</span>'}
+
+async function cargarReviews(){const el=document.getElementById("reviewList");el.innerHTML='<div class="empty">Cargando…</div>';try{REVIEWS=await api("list");renderReviews();document.getElementById("reviewCount").textContent=REVIEWS.length;consultarConteo()}catch(e){el.innerHTML=`<div class="alert err">${esc(e.message)}</div>`}}
+function ageClass(date){const h=(Date.now()-new Date(date).getTime())/36e5;if(h<6)return "green";if(h<24)return "yellow";return "red"}
+function ageText(date){const h=Math.max(0,(Date.now()-new Date(date).getTime())/36e5);return h<1?`${Math.round(h*60)} min`:h<24?`${Math.round(h)} h`:`${Math.floor(h/24)} d ${Math.round(h%24)} h`}
+function motiveType(m){const s=norm(m);if(s.includes("telefono"))return"telefono";if(s.includes("transicion")||s.includes("switchable")||s.includes("status"))return"transicion";if(s.includes("proxy")||s.includes("creacion")||s.includes("guia"))return"creacion";if(s.includes("regla automatica")||s.includes("sin regla"))return"regla";return"otros"}
+function renderReviews(){const text=norm(document.getElementById("filterText")?.value);const type=document.getElementById("filterType")?.value||"all";const age=document.getElementById("filterAge")?.value||"all";const rows=REVIEWS.filter(r=>(!text||norm(`${r.order_code} ${r.evento} ${r.motivo}`).includes(text))&&(type==="all"||motiveType(r.motivo)===type)&&(age==="all"||ageClass(r.created_at)===age));const el=document.getElementById("reviewList");if(!rows.length){el.innerHTML='<div class="card empty">No hay casos con esos filtros.</div>';return}el.innerHTML=rows.map(r=>{const ageC=ageClass(r.created_at), phone=motiveType(r.motivo)==="telefono";return `<div class="card review" id="review-${r.id}"><div><div class="review-code mono" onclick="abrirDetalle('${esc(r.order_code)}')">${esc(r.order_code)}</div><div class="review-event">${esc(r.evento||"Revisión manual")}</div><div style="margin-top:7px"><span class="badge ${ageC}">${ageText(r.created_at)}</span></div></div><div><div class="review-motivo">${esc(r.motivo)}</div><div class="muted" style="font-size:11px;margin-top:5px">Creado: ${fmt(r.created_at)}</div>${phone?`<div class="phone-row"><input class="input" id="tel-${r.id}" placeholder="099123123"><button class="btn primary small" onclick="completarTelefono(${r.id})">Completar y crear</button></div>`:""}<div id="msg-${r.id}"></div></div><div class="review-actions"><button class="btn secondary small" onclick="abrirDetalle('${esc(r.order_code)}')">Ver detalle</button><button class="btn secondary small" onclick="resolverCaso(${r.id},'${esc(r.order_code)}')">Marcar resuelto</button></div></div>`}).join("")}
+
+async function buscarGlobal(){
+  const q=document.getElementById("globalSearch").value.trim(),el=document.getElementById("searchResults");
+  if(q.length<2){el.innerHTML="";return}
+  el.innerHTML='<div class="muted">Buscando…</div>';
+  try{
+    const rows=await api("search",{query:{q}});
+    if(!rows.length){el.innerHTML='<div class="muted">Sin resultados.</div>';return}
+    el.innerHTML=rows.map(r=>{
+      const lookup=r.query||r.order_code||r.tracking_number||r.numero_guia||"";
+      const code=r.order_code||r.numero_guia||r.tracking_number||"Webhook sin orden";
+      const sub=r.tracking_number||r.numero_guia||r.guia_id||r.evento||r.evento_nombre||"";
+      const label=r.cerrado?esc(r.motivo_cierre||"Cerrado"):r.tipo==="revision"?"Revisión":r.tipo==="webhook"&&!r.order_code?"Webhook sin mapear":"Abierto";
+      const cls=r.cerrado?"green":r.tipo==="webhook"&&!r.order_code?"yellow":"blue";
+      return `<div class="search-result" onclick="abrirDetalle('${esc(lookup)}')"><div><div class="code mono">${esc(code)}</div><div class="muted" style="font-size:11px">${esc(sub)}</div></div><div class="spacer"></div><span class="badge ${cls}">${label}</span></div>`;
+    }).join("");
+  }catch(e){el.innerHTML=`<div class="alert err">${esc(e.message)}</div>`}
 }
 
-document.getElementById("password").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") login();
-});
+async function abrirDetalle(q){document.getElementById("detailModal").classList.remove("hidden");document.getElementById("detailTitle").textContent=q;document.getElementById("detailBody").innerHTML='<div class="empty">Consultando SendGround, UES y Supabase…</div>';try{CURRENT_DETAIL=await api("detail",{query:{q}});renderDetail()}catch(e){document.getElementById("detailBody").innerHTML=`<div class="alert err">${esc(e.message)}</div>`}}
+function cerrarDetalle(){document.getElementById("detailModal").classList.add("hidden");CURRENT_DETAIL=null}
+function latestUes(ev){if(!ev?.length)return null;return ev[ev.length-1]}
+function renderDetail(){
+  const d=CURRENT_DETAIL,env=d.envio||{},sg=d.sendground?.currentTask||{},pod=d.pod||{},proc=d.integracion?.eventosProcesados||[],wh=d.integracion?.webhooks||[],manual=d.integracion?.accionesManuales||[],reviews=(d.integracion?.revisiones||[]).filter(r=>!r.resuelto);
+  const liveEvents=d.ues?.eventos||[];
+  const webhookEvents=wh.map(w=>({estado:w.evento_nombre,subestado:w.evento_observaciones,fecha:w.evento_fecha||w.received_at}));
+  const timelineEvents=liveEvents.length?liveEvents:webhookEvents;
+  const last=latestUes(timelineEvents);
+  const display=d.displayCode||d.orderCode||env.tracking_number||env.guia_id||"Detalle";
+  document.getElementById("detailTitle").textContent=display;
+  document.getElementById("detailStatus").innerHTML=d.standaloneWebhook?'<span class="badge yellow">Webhook sin mapear</span>':env.cerrado?`<span class="badge green">${esc(env.motivo_cierre||"Cerrado")}</span>`:'<span class="badge blue">Abierto</span>';
 
-async function cargarLista() {
-  let res;
-  let items;
-  try {
-    res = await fetch(API_BASE + "?action=list", {
-      headers: { "X-Admin-Password": PASSWORD },
-    });
-    items = await res.json();
-  } catch (e) {
-    document.getElementById("loginMsg").innerHTML =
-      '<div class="msg err">No se pudo conectar: ' + esc(e.message) + '</div>';
-    return;
-  }
+  const guide=env.tracking_number||env.guia_id||wh.at(-1)?.numero_guia||wh.at(-1)?.tracking_number||"";
+  const refreshQuery=d.orderCode||guide||display;
+  const actions=`<div class="detail-actions"><button class="btn secondary small" onclick="abrirDetalle('${esc(refreshQuery)}')">↻ Actualizar</button>${d.orderCode?`<button class="btn primary small" onclick="reprocesar('${esc(d.orderCode)}')">Reprocesar ahora</button><button class="btn secondary small" onclick="copiar('${esc(d.orderCode)}')">Copiar ORD</button>`:""}${guide?`<button class="btn secondary small" onclick="copiar('${esc(guide)}')">Copiar guía</button>`:""}${d.orderCode?`<button class="btn secondary small" onclick="abrirSendGround('${esc(d.orderCode)}','${esc(d.sendground?.panelUrl||"")}')">Abrir SendGround</button>`:""}${d.orderCode&&reviews.length?`<button class="btn danger small" onclick="resolverOrden('${esc(d.orderCode)}')">Resolver ${reviews.length} alerta${reviews.length===1?"":"s"}</button>`:""}</div>`;
 
-  if (res.status === 401) {
-    document.getElementById("loginMsg").innerHTML =
-      '<div class="msg err">Contraseña incorrecta</div>';
-    return;
-  }
-  if (!res.ok || !Array.isArray(items)) {
-    document.getElementById("loginMsg").innerHTML =
-      '<div class="msg err">Error del panel: ' + esc(items?.error || `HTTP ${res.status}`) + '</div>';
-    return;
-  }
+  const standaloneBanner=d.standaloneWebhook?'<div class="alert warn"><b>Webhook recibido correctamente, pero esta guía todavía no tiene una orden SendGround asociada en ues_envios.</b><br>Esta vista sirve para validar transporte, payload y POD durante testing.</div>':"";
+  const cards=`<div class="detail-grid"><div class="card detail-card"><div class="detail-title">SendGround</div><div class="kv"><div class="k">Orden</div><div class="v mono">${esc(d.orderCode||"Sin mapear")}</div><div class="k">Tarea actual</div><div class="v">${esc(sg.subtipo||"—")}</div><div class="k">Estado</div><div class="v">${esc(sg.estado||"—")}</div><div class="k">Worker</div><div class="v">${esc(sg.assignedWorkerId||"Sin asignar")}</div></div></div><div class="card detail-card"><div class="detail-title">UES</div><div class="kv"><div class="k">Guía</div><div class="v mono">${esc(guide||"—")}</div><div class="k">Último evento</div><div class="v">${esc(last?.estado||"—")}</div><div class="k">Subestado / observación</div><div class="v">${esc(last?.subestado||"—")}</div><div class="k">Fecha</div><div class="v">${esc(last?.fecha||"—")}</div></div></div><div class="card detail-card"><div class="detail-title">Integración</div><div class="kv"><div class="k">Último cursor</div><div class="v mono">${esc(env.ultimo_evento_procesado||"—")}</div><div class="k">Último intento</div><div class="v">${fmt(env.ultimo_intento_at)}</div><div class="k">Eventos procesados</div><div class="v">${proc.length}</div><div class="k">Webhooks guardados</div><div class="v">${wh.length}</div></div></div></div>`;
 
-  document.getElementById("loginMsg").innerHTML = "";
-  document.getElementById("login").style.display = "none";
-  document.getElementById("app").style.display = "block";
+  const podNames={receptor:"Receptor",documento:"Documento","geolocalización":"Geolocalización",firma:"Firma",fecha:"Fecha"};
+  const missing=new Set(pod.faltantes||[]);
+  const podBox=`<section class="section"><div class="section-head"><h2>Prueba de entrega (POD)</h2>${pod.disponible?`<span class="badge ${pod.completo?"green":"yellow"}">${pod.completo?"Completo":"Incompleto"}</span>`:'<span class="badge gray">Sin webhook de entrega</span>'}</div><div class="card detail-card"><div class="pod-grid">${Object.entries(podNames).map(([k,n])=>`<div class="pod-item ${missing.has(k)?"miss":"ok"}">${missing.has(k)?"✕":"✓"}<br>${n}</div>`).join("")}</div>${pod.disponible?`<div class="kv" style="margin-top:12px"><div class="k">Recibió</div><div class="v">${esc(pod.receptor||"—")}</div><div class="k">Documento</div><div class="v">${esc(pod.documento||"—")}</div><div class="k">Observación</div><div class="v">${esc(pod.observaciones||"—")}</div><div class="k">Coordenadas</div><div class="v mono">${pod.latitud!=null&&pod.longitud!=null?`${esc(pod.latitud)}, ${esc(pod.longitud)}`:"—"}</div></div>`:""}</div></section>`;
 
-  const listEl = document.getElementById("list");
+  const uesTimeline=`<section class="section"><div class="section-head"><h2>Línea de tiempo UES</h2><span class="count">${timelineEvents.length}</span></div><div class="card detail-card"><div class="timeline">${timelineEvents.length?timelineEvents.map(e=>`<div class="event"><div class="event-title">${esc(e.estado||"Evento")}</div><div class="event-sub">${esc(e.fecha||"")}${e.subestado?` · ${esc(e.subestado)}`:""}</div></div>`).join(""):'<div class="muted">Sin eventos disponibles.</div>'}</div></div></section>`;
 
-  if (items.length === 0) {
-    listEl.innerHTML = '<div class="empty">No hay casos pendientes 🎉</div>';
-    return;
-  }
+  const procEvents=proc.map(e=>({kind:"procesado",date:e.processed_at||e.updated_at,title:e.estado,sub:e.subestado,source:e.source_first,status:e.estado_procesamiento,error:e.error}));
+  const manualEvents=manual.map(e=>({kind:"manual",date:e.created_at,title:e.action,sub:"",source:"manual",status:e.success?"procesado":"fallido",error:e.success?null:JSON.stringify(e.detail||{})}));
+  const allIntegration=[...procEvents,...manualEvents].sort((a,b)=>new Date(a.date||0)-new Date(b.date||0));
+  const intTimeline=`<section class="section"><div class="section-head"><h2>Procesamiento de integración</h2><span class="count">${allIntegration.length}</span></div><div class="card detail-card"><div class="timeline">${allIntegration.length?allIntegration.map(e=>`<div class="event"><div class="event-title">${esc(e.title||"Acción")} <span class="badge ${e.source==="webhook"?"green":e.source==="manual"?"yellow":"blue"}">${e.source==="webhook"?"Webhook":e.source==="manual"?"Manual":"Poller"}</span> <span class="badge ${e.status==="procesado"?"green":e.status==="fallido"?"red":"yellow"}">${esc(e.status)}</span></div><div class="event-sub">${fmt(e.date)}${e.sub?` · ${esc(e.sub)}`:""}</div>${e.error?`<div class="event-note" style="color:var(--red)">${esc(e.error)}</div>`:""}</div>`).join(""):'<div class="muted">Sin eventos registrados.</div>'}</div></div></section>`;
 
-  listEl.innerHTML = items.map((item) => {
-    const necesitaTelefono = String(item.motivo ?? "").toLowerCase().includes("teléfono");
-    return `
-      <div class="card" id="item-${item.id}">
-        <div class="order-code">${esc(item.order_code)}</div>
-        <div class="motivo">${esc(item.motivo)}</div>
-        ${necesitaTelefono ? `
-          <label>Teléfono del destinatario (ej. 099123123)</label>
-          <input type="text" id="telefono-${item.id}" placeholder="099123123" />
-          <button onclick="completarTelefono(${item.id})">Completar y crear envío</button>
-        ` : `
-          <div style="color:#888; font-size:0.85rem;">
-            Este caso requiere revisión manual directa (no es un dato completable desde acá) — revisar en Sendground/UES.
-          </div>
-        `}
-        <div id="msg-${item.id}"></div>
-      </div>
-    `;
-  }).join("");
+  const rev=reviews.length?`<section class="section"><div class="section-head"><h2>Alertas pendientes</h2><span class="count">${reviews.length}</span></div>${reviews.map(r=>`<div class="alert warn"><b>${esc(r.evento)}</b><br>${esc(r.motivo)} <button class="btn secondary small" onclick="resolverCaso(${r.id},'${esc(d.orderCode)}')">Resolver</button></div>`).join("")}</section>`:"";
+  const webhookAudit=wh.length?`<section class="section"><details><summary style="cursor:pointer;font-weight:800;color:var(--navy)">Webhooks recibidos (${wh.length})</summary><div class="timeline" style="margin-top:10px">${wh.map(w=>`<div class="event"><div class="event-title">${esc(w.evento_nombre||"Evento")} <span class="badge ${w.processing_ok===false?"red":w.processing_ok===true?"green":"yellow"}">${w.processing_ok===false?"Error":w.processing_ok===true?"OK":"Recibido"}</span></div><div class="event-sub">${fmt(w.received_at)} · ${esc(w.numero_guia||w.tracking_number||"")}</div>${w.processing_detail?`<div class="event-note">${esc(w.processing_detail)}</div>`:""}</div>`).join("")}</div></details></section>`:"";
+  const warnings=(d.warnings||[]).length?`<div class="alert warn"><b>Diagnóstico parcial:</b><br>${d.warnings.map(esc).join("<br>")}</div>`:"";
+  const raw=`<section class="section"><details><summary style="cursor:pointer;font-weight:800;color:var(--navy)">Detalles técnicos / JSON</summary><pre class="json-box">${esc(JSON.stringify(d,null,2))}</pre></details></section>`;
+  document.getElementById("detailBody").innerHTML=actions+standaloneBanner+warnings+cards+podBox+rev+uesTimeline+intTimeline+webhookAudit+raw;
 }
 
-async function completarTelefono(id) {
-  const telefono = document.getElementById("telefono-" + id).value.trim();
-  const msgEl = document.getElementById("msg-" + id);
-
-  if (!telefono) {
-    msgEl.innerHTML = '<div class="msg err">Ingresá un teléfono</div>';
-    return;
-  }
-
-  msgEl.innerHTML = '<div class="msg">Creando envío...</div>';
-
-  try {
-    const res = await fetch(API_BASE + "?action=complete", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Admin-Password": PASSWORD,
-      },
-      body: JSON.stringify({ id, telefono }),
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      msgEl.innerHTML = '<div class="msg ok">Envío creado: ' + esc(data.trackingNumber ?? data.detalle ?? 'OK') + (data.warning ? '<br>⚠️ ' + esc(data.warning) : '') + '</div>';
-      setTimeout(() => {
-        document.getElementById("item-" + id)?.remove();
-        consultarConteo();
-      }, 1500);
-    } else {
-      msgEl.innerHTML = '<div class="msg err">Error: ' + esc(data.error || `HTTP ${res.status}`) + '</div>';
-    }
-  } catch (e) {
-    msgEl.innerHTML = '<div class="msg err">No se pudo conectar: ' + esc(e.message) + '</div>';
-  }
-}
+async function resolverCaso(id,orderCode){if(!confirm(`¿Marcar esta alerta de ${orderCode} como resuelta?`))return;try{await api("resolve",{method:"POST",body:{id}});toast("Alerta resuelta");await cargarReviews();if(CURRENT_DETAIL?.orderCode===orderCode)abrirDetalle(orderCode);cargarDashboard(true)}catch(e){toast(e.message)}}
+async function resolverOrden(orderCode){if(!confirm(`¿Marcar TODAS las alertas pendientes de ${orderCode} como resueltas?`))return;try{await api("resolve",{method:"POST",body:{order_code:orderCode}});toast("Alertas resueltas");await cargarReviews();abrirDetalle(orderCode);cargarDashboard(true)}catch(e){toast(e.message)}}
+async function completarTelefono(id){const input=document.getElementById(`tel-${id}`),msg=document.getElementById(`msg-${id}`),telefono=input?.value.trim();if(!telefono){toast("Ingresá un teléfono");return}msg.innerHTML='<div class="alert warn">Procesando…</div>';try{const r=await api("complete",{method:"POST",body:{id,telefono}});msg.innerHTML=`<div class="alert ok">✓ ${esc(r.trackingNumber||r.detalle||"Completado")}${r.warning?`<br>⚠ ${esc(r.warning)}`:""}</div>`;setTimeout(()=>{cargarReviews();cargarDashboard(true)},900)}catch(e){msg.innerHTML=`<div class="alert err">${esc(e.message)}</div>`}}
+async function reprocesar(orderCode){if(!confirm(`Esto ejecutará el poller AHORA solo para ${orderCode}. ¿Continuar?`))return;toast("Reprocesando…");try{const r=await api("reprocess",{method:"POST",body:{order_code:orderCode}});toast(r.ok?"Reproceso terminado":"Reproceso devolvió error");await abrirDetalle(orderCode);cargarReviews();cargarDashboard(true)}catch(e){toast(e.message)}}
+async function probarUES(){toast("Probando conexión…");try{const r=await api("health");toast(`UES OK · ${r.catalogo?.departamentos||0} departamentos · ${r.servicios?.length||0} servicios`)}catch(e){toast(`Error UES: ${e.message}`)}}
+function copiar(v){navigator.clipboard?.writeText(v);toast("Copiado: "+v)}
+function abrirSendGround(orderCode,url){copiar(orderCode);window.open(url||"https://app.sendground.com/pedidos","_blank","noopener")}
+async function refrescarTodo(){await Promise.all([cargarDashboard(true),cargarReviews()]);toast("Panel actualizado")}
 </script>
 </body>
 </html>
