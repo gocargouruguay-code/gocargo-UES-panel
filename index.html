@@ -22,16 +22,16 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:12p
 .btn{border:0;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:700;transition:.15s}.btn:hover{transform:translateY(-1px)}.btn.primary{background:var(--navy);color:#fff}.btn.secondary{background:#eef3f8;color:var(--navy)}.btn.danger{background:var(--red-bg);color:var(--red)}.btn.small{font-size:12px;padding:7px 9px}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}.wide{width:100%;margin-top:14px}
 .alert{padding:10px 12px;border-radius:9px;font-size:13px;margin-top:10px}.alert.ok{background:var(--green-bg);color:var(--green)}.alert.warn{background:var(--yellow-bg);color:var(--yellow)}.alert.err{background:var(--red-bg);color:var(--red)}
 .hero{display:flex;align-items:flex-start;gap:18px;margin-bottom:18px}.hero h1{font-size:25px;margin:0;color:var(--navy)}.hero p{margin:5px 0 0;color:var(--muted)}.hero-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-.metrics{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:12px;margin-bottom:16px}.metric{padding:16px}.metric .value{font-size:28px;font-weight:850;color:var(--navy)}.metric .label{font-size:12px;color:var(--muted);margin-top:2px}.metric.warn .value{color:var(--yellow)}.metric.err .value{color:var(--red)}.metric.ok .value{color:var(--green)}
+.metrics{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:12px;margin-bottom:16px}.metric{padding:16px}.clickable-card{cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}.clickable-card:hover{transform:translateY(-2px);border-color:#aac1d8;box-shadow:0 12px 30px rgba(19,40,70,.12)}.clickable-card:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(11,94,168,.10),var(--shadow)}.metric .value{font-size:28px;font-weight:850;color:var(--navy)}.metric .label{font-size:12px;color:var(--muted);margin-top:2px}.metric.warn .value{color:var(--yellow)}.metric.err .value{color:var(--red)}.metric.ok .value{color:var(--green)}
 .health-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}.health-card{padding:15px}.health-head{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--navy)}.health-meta{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.55}.health-error{font-size:12px;color:var(--red);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .section{margin-top:18px}.section-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}.section-head h2{font-size:17px;margin:0;color:var(--navy)}.section-head .count{font-size:11px;padding:3px 7px;background:#e7eef6;border-radius:999px;color:var(--navy);font-weight:800}
-.search-card{padding:14px;margin-bottom:18px}.search-row{display:flex;gap:8px}.search-row .input{font-size:15px}.search-results{display:grid;gap:7px;margin-top:10px}.search-result{border:1px solid var(--line);border-radius:9px;padding:10px 12px;cursor:pointer;display:flex;gap:12px;align-items:center;background:#fff}.search-result:hover{border-color:#aac1d8;background:#f9fbfd}.search-result .code{font-weight:850;color:var(--navy)}
+.search-card{padding:14px;margin-bottom:18px}.search-row{display:flex;gap:8px}.search-row .input{font-size:15px}.search-results{display:grid;gap:7px;margin-top:10px}.search-result{border:1px solid var(--line);border-radius:9px;padding:10px 12px;cursor:pointer;display:flex;gap:12px;align-items:center;background:#fff}.search-result:hover{border-color:#aac1d8;background:#f9fbfd}.search-result .code{font-weight:850;color:var(--navy)}.drawer-list{display:grid;gap:8px}.drawer-list .search-result{width:100%}.drawer-summary{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
 .filters{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;margin-bottom:10px}.queue{display:grid;gap:10px}.review{padding:14px;display:grid;grid-template-columns:170px 1fr auto;gap:14px;align-items:start}.review-code{font-weight:850;color:var(--navy);cursor:pointer}.review-event{font-size:12px;color:var(--muted);margin-top:4px}.review-motivo{font-size:13px;font-weight:650;color:#6b4b0b;line-height:1.45}.review-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.phone-row{display:flex;gap:6px;margin-top:9px;max-width:380px}.phone-row .input{padding:7px 9px;font-size:12px}
 .badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800}.badge.green{background:var(--green-bg);color:var(--green)}.badge.yellow{background:var(--yellow-bg);color:var(--yellow)}.badge.red{background:var(--red-bg);color:var(--red)}.badge.gray{background:#eef2f6;color:#64748b}.badge.blue{background:#eaf2fb;color:var(--blue)}
 .empty{text-align:center;color:var(--muted);padding:38px 10px}.footer-note{text-align:center;color:#94a3b8;font-size:11px;margin-top:22px}
 .modal-backdrop{position:fixed;inset:0;background:rgba(10,24,44,.46);z-index:50;display:flex;justify-content:flex-end}.drawer{width:min(780px,96vw);height:100%;background:#f7f9fc;overflow:auto;box-shadow:-8px 0 30px rgba(0,0,0,.16)}.drawer-head{position:sticky;top:0;background:white;border-bottom:1px solid var(--line);padding:17px 18px;z-index:2;display:flex;align-items:center;gap:10px}.drawer-head h2{margin:0;color:var(--navy);font-size:20px}.drawer-body{padding:16px}.close{margin-left:auto;background:#eef2f6;color:#334155;border:0;border-radius:9px;width:34px;height:34px;cursor:pointer;font-size:19px}
 .detail-actions{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px}.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.detail-card{padding:13px}.detail-title{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}.kv{display:grid;grid-template-columns:120px 1fr;gap:5px 8px;font-size:12px;line-height:1.35}.kv .k{color:var(--muted)}.kv .v{font-weight:650;word-break:break-word}
-.pod-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.pod-item{border:1px solid var(--line);border-radius:9px;padding:9px;text-align:center;font-size:11px}.pod-item.ok{background:var(--green-bg);color:var(--green);border-color:#bfe5ca}.pod-item.miss{background:var(--red-bg);color:var(--red);border-color:#f1c6c1}
+.pod-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.pod-item{border:1px solid var(--line);border-radius:9px;padding:9px;text-align:center;font-size:11px}.pod-item.ok{background:var(--green-bg);color:var(--green);border-color:#bfe5ca}.pod-item.miss{background:var(--red-bg);color:var(--red);border-color:#f1c6c1}.pod-item.partial{background:#f7f9fc;color:#64748b;border-color:#dfe6ee}
 .timeline{position:relative;margin-left:6px;padding-left:18px;border-left:2px solid #d9e3ed}.event{position:relative;padding:0 0 14px 3px}.event:before{content:"";position:absolute;left:-24px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--blue);border:2px solid white;box-shadow:0 0 0 1px #b8cadb}.event-title{font-size:13px;font-weight:800}.event-sub{font-size:12px;color:var(--muted);margin-top:2px}.event-note{font-size:12px;margin-top:3px}.tabs{display:flex;gap:6px;margin:14px 0 9px}.tab{background:#e8eef5;color:#475569}.tab.active{background:var(--navy);color:white}.json-box{background:#101827;color:#d5e0ef;border-radius:10px;padding:12px;font-size:11px;overflow:auto;max-height:400px;white-space:pre-wrap;word-break:break-word}
 .toast{position:fixed;right:18px;bottom:18px;z-index:100;background:#172033;color:#fff;padding:11px 14px;border-radius:10px;box-shadow:var(--shadow);font-size:13px;max-width:360px}
 @media(max-width:980px){.metrics{grid-template-columns:repeat(3,1fr)}.health-grid,.detail-grid{grid-template-columns:1fr}.review{grid-template-columns:1fr}.review-actions{justify-content:flex-start}.filters{grid-template-columns:1fr 1fr}.pod-grid{grid-template-columns:repeat(2,1fr)}}
@@ -105,12 +105,81 @@ document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="E
 async function login(){PASSWORD=document.getElementById("password").value;const btn=document.getElementById("loginBtn");btn.disabled=true;document.getElementById("loginMsg").innerHTML="";try{await cargarDashboard();document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");await cargarReviews();autoTimer=setInterval(()=>cargarDashboard(true),60000)}catch(e){document.getElementById("loginMsg").innerHTML=`<div class="alert err">${e.status===401?"Contraseña incorrecta":esc(e.message)}</div>`}finally{btn.disabled=false}}
 
 function componentState(h){if(!h)return {c:"gray",t:"Sin datos"};const err=h.last_error_at?new Date(h.last_error_at):null;const ok=h.last_success_at?new Date(h.last_success_at):null;if(err&&(!ok||err>ok))return {c:"red",t:"Error"};if(ok)return {c:"green",t:"Operativo"};return {c:"yellow",t:"Esperando primera ejecución"}}
-function metric(label,value,cls=""){return `<div class="card metric ${cls}"><div class="value">${esc(value)}</div><div class="label">${esc(label)}</div></div>`}
+function metric(key,label,value,cls=""){return `<div class="card metric ${cls} clickable-card" role="button" tabindex="0" onclick="abrirMetrica('${esc(key)}','${esc(label)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirMetrica('${esc(key)}','${esc(label)}')}"><div class="value">${esc(value)}</div><div class="label">${esc(label)}</div></div>`}
 
 async function cargarDashboard(silent=false){try{DASHBOARD=await api("dashboard");renderDashboard()}catch(e){if(!silent)throw e;document.getElementById("topStatus").innerHTML='<span class="dot red"></span><span>Error de panel</span>'}}
-function renderDashboard(){const m=DASHBOARD.metrics||{};document.getElementById("metrics").innerHTML=[metric("Pedidos abiertos",m.abiertos||0),metric("Entregados hoy",m.entregadosHoy||0,"ok"),metric("Revisión pendiente",m.revisionPendiente||0,(m.revisionPendiente||0)?"warn":""),metric("Errores 24 h",m.errores24h||0,(m.errores24h||0)?"err":""),metric("Webhooks recibidos hoy",m.webhooksRecibidosHoy||0),metric("POD incompletos hoy",m.podIncompletosHoy||0,(m.podIncompletosHoy||0)?"warn":"")].join("");
- const hb=Object.fromEntries((DASHBOARD.heartbeats||[]).map(x=>[x.component,x]));const comps=[["ues-webhook","Webhook","Tiempo real / 24×7"],["ues-proxy","Creación de guías","14:00–19:45 / 15 min"],["ues-poller","Poller de respaldo","22:00 / diario"]];let anyRed=false;document.getElementById("health").innerHTML=comps.map(([key,title,schedule])=>{const h=hb[key];const st=componentState(h);if(st.c==="red")anyRed=true;const last= key==="ues-webhook"&&DASHBOARD.ultimoWebhook?DASHBOARD.ultimoWebhook.received_at:h?.last_success_at;const capacity=key==="ues-poller"&&m.pollerCapacidadSuperada?`<div class="alert warn" style="margin-top:8px">⚠ ${esc(m.abiertos)} pedidos abiertos; el poller actual procesa como máximo ${esc(m.pollerMaxPedidosPorCorrida)} por corrida.</div>`:"";return `<div class="card health-card"><div class="health-head"><span class="dot ${st.c}"></span>${title}<span class="badge ${st.c}">${st.t}</span></div><div class="health-meta">Última actividad: <b>${fmt(last)}</b><br>Programación: ${schedule}${key==="ues-webhook"&&DASHBOARD.ultimoWebhook?`<br>Último evento: <b>${esc(DASHBOARD.ultimoWebhook.evento_nombre||"—")}</b> · ${esc(DASHBOARD.ultimoWebhook.order_code||DASHBOARD.ultimoWebhook.tracking_number||"sin mapeo")}`:""}</div>${h?.last_error?`<div class="health-error" title="${esc(h.last_error)}">${esc(h.last_error)}</div>`:""}${capacity}</div>`}).join("");
- const warn=(m.revisionPendiente||0)>0||(m.errores24h||0)>0||(m.podIncompletosHoy||0)>0||m.pollerCapacidadSuperada;document.getElementById("topStatus").innerHTML=anyRed?'<span class="dot red"></span><span>Requiere atención</span>':warn?'<span class="dot yellow"></span><span>Operativo con alertas</span>':'<span class="dot green"></span><span>Operativo</span>'}
+function renderDashboard(){
+ const m=DASHBOARD.metrics||{};
+ document.getElementById("metrics").innerHTML=[
+   metric("abiertos","Pedidos abiertos",m.abiertos||0),
+   metric("entregadosHoy","Entregados hoy",m.entregadosHoy||0,"ok"),
+   metric("revisionPendiente","Revisión pendiente",m.revisionPendiente||0,(m.revisionPendiente||0)?"warn":""),
+   metric("errores24h","Errores 24 h",m.errores24h||0,(m.errores24h||0)?"err":""),
+   metric("webhooksHoy","Webhooks recibidos hoy",m.webhooksRecibidosHoy||0),
+   metric("entregasSinPodHoy","Entregas sin POD",m.entregasSinPodHoy||0,(m.entregasSinPodHoy||0)?"warn":"")
+ ].join("");
+ const hb=Object.fromEntries((DASHBOARD.heartbeats||[]).map(x=>[x.component,x]));
+ const comps=[["ues-webhook","Webhook","Tiempo real / 24×7"],["ues-proxy","Creación de guías","14:00–18:00 / 30 min"],["ues-poller","Poller de respaldo","22:00 / diario"]];
+ let anyRed=false;
+ document.getElementById("health").innerHTML=comps.map(([key,title,schedule])=>{
+   const h=hb[key],st=componentState(h);if(st.c==="red")anyRed=true;
+   const last=key==="ues-webhook"&&DASHBOARD.ultimoWebhook?DASHBOARD.ultimoWebhook.received_at:h?.last_success_at;
+   const extra=key==="ues-poller"?'<br>Procesamiento: lotes de 15 hasta recorrer todos los pedidos elegibles':"";
+   return `<div class="card health-card clickable-card" role="button" tabindex="0" onclick="abrirComponente('${key}','${esc(title)}','${esc(schedule)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirComponente('${key}','${esc(title)}','${esc(schedule)}')}"><div class="health-head"><span class="dot ${st.c}"></span>${title}<span class="badge ${st.c}">${st.t}</span></div><div class="health-meta">Última actividad: <b>${fmt(last)}</b><br>Programación: ${schedule}${extra}${key==="ues-webhook"&&DASHBOARD.ultimoWebhook?`<br>Último evento: <b>${esc(DASHBOARD.ultimoWebhook.evento_nombre||"—")}</b> · ${esc(DASHBOARD.ultimoWebhook.order_code||DASHBOARD.ultimoWebhook.tracking_number||"sin mapeo")}`:""}</div>${h?.last_error?`<div class="health-error" title="${esc(h.last_error)}">${esc(h.last_error)}</div>`:""}</div>`;
+ }).join("");
+ const warn=(m.revisionPendiente||0)>0||(m.errores24h||0)>0||(m.entregasSinPodHoy||0)>0;
+ document.getElementById("topStatus").innerHTML=anyRed?'<span class="dot red"></span><span>Requiere atención</span>':warn?'<span class="dot yellow"></span><span>Operativo con alertas</span>':'<span class="dot green"></span><span>Operativo</span>';
+}
+
+
+function abrirModalBase(titulo,estadoHtml=""){
+ CURRENT_DETAIL=null;
+ document.getElementById("detailModal").classList.remove("hidden");
+ document.getElementById("detailTitle").textContent=titulo;
+ document.getElementById("detailStatus").innerHTML=estadoHtml;
+}
+
+function rowLookup(r){return r.query||r.order_code||r.tracking_number||r.numero_guia||r.guia_id||""}
+
+function renderListaMetrica(data){
+ const rows=Array.isArray(data?.rows)?data.rows:[];
+ const total=Number(data?.total??rows.length);
+ document.getElementById("detailStatus").innerHTML=`<span class="badge blue">${esc(total)} registro${total===1?"":"s"}</span>`;
+ if(!rows.length){
+   document.getElementById("detailBody").innerHTML='<div class="card empty">No hay registros para mostrar.</div>';
+   return;
+ }
+ const lista=rows.map(r=>{
+   const lookup=rowLookup(r);
+   const attrs=lookup?`onclick="abrirDetalle('${esc(lookup)}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){abrirDetalle('${esc(lookup)}')}"`:"";
+   return `<div class="search-result" ${attrs}><div><div class="code mono">${esc(r.code||lookup||"—")}</div><div style="font-size:12px;font-weight:750;margin-top:2px">${esc(r.title||"")}</div><div class="muted" style="font-size:11px;margin-top:2px">${esc(r.subtitle||"")}</div>${r.date?`<div class="muted" style="font-size:11px;margin-top:2px">${fmt(r.date)}</div>`:""}</div><div class="spacer"></div>${r.badge?`<span class="badge ${esc(r.badgeClass||"blue")}">${esc(r.badge)}</span>`:""}</div>`;
+ }).join("");
+ document.getElementById("detailBody").innerHTML=`<div class="drawer-summary"><span class="muted">Hacé clic en un registro para abrir el detalle completo.</span></div><div class="drawer-list">${lista}</div>`;
+}
+
+async function abrirMetrica(kind,label){
+ abrirModalBase(label,'<span class="badge gray">Cargando…</span>');
+ document.getElementById("detailBody").innerHTML='<div class="empty">Consultando registros…</div>';
+ try{
+   const data=await api("dashboard-list",{query:{kind}});
+   renderListaMetrica(data);
+ }catch(e){
+   document.getElementById("detailStatus").innerHTML='<span class="badge red">Error</span>';
+   document.getElementById("detailBody").innerHTML=`<div class="alert err">${esc(e.message)}</div>`;
+ }
+}
+
+function abrirComponente(key,title,schedule){
+ const hb=Object.fromEntries((DASHBOARD?.heartbeats||[]).map(x=>[x.component,x]));
+ const h=hb[key]||null,st=componentState(h);
+ const ultimo=key==="ues-webhook"?DASHBOARD?.ultimoWebhook:null;
+ const last=key==="ues-webhook"&&ultimo?ultimo.received_at:h?.last_success_at;
+ abrirModalBase(title,`<span class="badge ${st.c}">${esc(st.t)}</span>`);
+ const lookup=ultimo?rowLookup(ultimo):"";
+ const webhookExtra=ultimo?`<section class="section"><div class="section-head"><h2>Último webhook</h2></div><div class="card detail-card"><div class="kv"><div class="k">Pedido</div><div class="v mono">${esc(ultimo.order_code||"Sin mapear")}</div><div class="k">Tracking / guía</div><div class="v mono">${esc(ultimo.tracking_number||ultimo.numero_guia||"—")}</div><div class="k">Evento</div><div class="v">${esc(ultimo.evento_nombre||"—")}</div><div class="k">Resultado</div><div class="v">${ultimo.processing_ok===false?"Error":ultimo.processing_ok===true?"OK":"Recibido"}</div><div class="k">Fecha</div><div class="v">${fmt(ultimo.received_at)}</div></div>${lookup?`<button class="btn secondary small" style="margin-top:10px" onclick="abrirDetalle('${esc(lookup)}')">Abrir detalle</button>`:""}</div></section>`:"";
+ const result=h?.last_result?`<section class="section"><details open><summary style="cursor:pointer;font-weight:800;color:var(--navy)">Último resultado técnico</summary><pre class="json-box">${esc(JSON.stringify(h.last_result,null,2))}</pre></details></section>`:"";
+ document.getElementById("detailBody").innerHTML=`<div class="detail-grid"><div class="card detail-card"><div class="detail-title">Estado</div><div class="kv"><div class="k">Componente</div><div class="v mono">${esc(key)}</div><div class="k">Programación</div><div class="v">${esc(schedule)}</div><div class="k">Última actividad</div><div class="v">${fmt(last)}</div><div class="k">Último inicio</div><div class="v">${fmt(h?.last_started_at)}</div><div class="k">Último éxito</div><div class="v">${fmt(h?.last_success_at)}</div><div class="k">Último error</div><div class="v">${fmt(h?.last_error_at)}</div></div></div></div>${h?.last_error?`<div class="alert err"><b>Último error:</b><br>${esc(h.last_error)}</div>`:""}${webhookExtra}${result}`;
+}
 
 async function cargarReviews(){const el=document.getElementById("reviewList");el.innerHTML='<div class="empty">Cargando…</div>';try{REVIEWS=await api("list");renderReviews();document.getElementById("reviewCount").textContent=REVIEWS.length;consultarConteo()}catch(e){el.innerHTML=`<div class="alert err">${esc(e.message)}</div>`}}
 function ageClass(date){const h=(Date.now()-new Date(date).getTime())/36e5;if(h<6)return "green";if(h<24)return "yellow";return "red"}
@@ -158,7 +227,7 @@ function renderDetail(){
 
   const podNames={receptor:"Receptor",documento:"Documento","geolocalización":"Geolocalización",firma:"Firma",fecha:"Fecha"};
   const missing=new Set(pod.faltantes||[]);
-  const podBox=`<section class="section"><div class="section-head"><h2>Prueba de entrega (POD)</h2>${pod.disponible?`<span class="badge ${pod.completo?"green":"yellow"}">${pod.completo?"Completo":"Incompleto"}</span>`:'<span class="badge gray">Sin webhook de entrega</span>'}</div><div class="card detail-card"><div class="pod-grid">${Object.entries(podNames).map(([k,n])=>`<div class="pod-item ${missing.has(k)?"miss":"ok"}">${missing.has(k)?"✕":"✓"}<br>${n}</div>`).join("")}</div>${pod.disponible?`<div class="kv" style="margin-top:12px"><div class="k">Recibió</div><div class="v">${esc(pod.receptor||"—")}</div><div class="k">Documento</div><div class="v">${esc(pod.documento||"—")}</div><div class="k">Observación</div><div class="v">${esc(pod.observaciones||"—")}</div><div class="k">Coordenadas</div><div class="v mono">${pod.latitud!=null&&pod.longitud!=null?`${esc(pod.latitud)}, ${esc(pod.longitud)}`:"—"}</div></div>`:""}</div></section>`;
+  const podBox=`<section class="section"><div class="section-head"><h2>Prueba de entrega (POD)</h2>${pod.disponible?`<span class="badge ${pod.completo?"green":"blue"}">${pod.completo?"Completo":"Parcial"}</span>`:'<span class="badge gray">Sin webhook de entrega</span>'}</div><div class="card detail-card"><div class="pod-grid">${Object.entries(podNames).map(([k,n])=>`<div class="pod-item ${missing.has(k)?"partial":"ok"}">${missing.has(k)?"—":"✓"}<br>${n}</div>`).join("")}</div>${pod.disponible?`<div class="kv" style="margin-top:12px"><div class="k">Recibió</div><div class="v">${esc(pod.receptor||"—")}</div><div class="k">Documento</div><div class="v">${esc(pod.documento||"—")}</div><div class="k">Observación</div><div class="v">${esc(pod.observaciones||"—")}</div><div class="k">Coordenadas</div><div class="v mono">${pod.latitud!=null&&pod.longitud!=null?`${esc(pod.latitud)}, ${esc(pod.longitud)}`:"—"}</div></div>`:""}<div class="muted" style="font-size:11px;margin-top:10px">Los campos faltantes son informativos y no generan una alerta por sí solos.</div></div></section>`;
 
   const uesTimeline=`<section class="section"><div class="section-head"><h2>Línea de tiempo UES</h2><span class="count">${timelineEvents.length}</span></div><div class="card detail-card"><div class="timeline">${timelineEvents.length?timelineEvents.map(e=>`<div class="event"><div class="event-title">${esc(e.estado||"Evento")}</div><div class="event-sub">${esc(e.fecha||"")}${e.subestado?` · ${esc(e.subestado)}`:""}</div></div>`).join(""):'<div class="muted">Sin eventos disponibles.</div>'}</div></div></section>`;
 
