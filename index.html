@@ -98,7 +98,7 @@ const norm = (v) => String(v??"").normalize("NFD").replace(/[\u0300-\u036f]/g,""
 function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.remove("hidden");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.add("hidden"),2600)}
 async function api(action,{method="GET",body=null,query={}}={}){const qs=new URLSearchParams({action,...query});const res=await fetch(API_BASE+"?"+qs,{method,headers:{...(PASSWORD?{"X-Admin-Password":PASSWORD}:{}),...(body?{"Content-Type":"application/json"}:{})},body:body?JSON.stringify(body):null});let data;try{data=await res.json()}catch{data={error:`HTTP ${res.status}`}}if(!res.ok)throw Object.assign(new Error(data.error||`HTTP ${res.status}`),{status:res.status,data});return data}
 
-async function consultarConteo(){const el=document.getElementById("countBadge"),top=document.getElementById("topStatus");try{const r=await api("count");const revisiones=Number(r.revisionPendiente??r.count??0),errores=Number(r.errores24h??0);if(revisiones===0&&errores===0){el.innerHTML='<div class="alert ok">✓ Sin revisiones pendientes ni errores recientes</div>'}else{const partes=[];if(revisiones>0)partes.push(`⚠ ${revisiones} revisión${revisiones===1?"":"es"} pendiente${revisiones===1?"":"s"}`);else partes.push('✓ 0 revisiones pendientes');if(errores>0)partes.push(`⚠ ${errores} error${errores===1?"":"es"} en las últimas 24 h`);else partes.push('✓ 0 errores en las últimas 24 h');el.innerHTML=`<div class="alert warn">${partes.join("<br>")}</div>`}top.innerHTML='<span class="dot green"></span><span>Panel disponible</span>';const total=revisiones+errores;document.title=total?`(${total}) GoCargo / UES`:'GoCargo / UES — Torre de control'}catch{el.innerHTML='<div class="alert err">No se pudo consultar el estado</div>';top.innerHTML='<span class="dot red"></span><span>Sin conexión</span>'}}
+async function consultarConteo(){const el=document.getElementById("countBadge"),top=document.getElementById("topStatus");try{const r=await api("count");const revisiones=Number(r.revisionPendiente??r.count??0),errores=Number(r.erroresPendientes??r.errores24h??0);if(revisiones===0&&errores===0){el.innerHTML='<div class="alert ok">✓ Sin revisiones pendientes ni errores activos</div>'}else{const partes=[];if(revisiones>0)partes.push(`⚠ ${revisiones} revisión${revisiones===1?"":"es"} pendiente${revisiones===1?"":"s"}`);else partes.push('✓ 0 revisiones pendientes');if(errores>0)partes.push(`⚠ ${errores} error${errores===1?"":"es"} pendiente${errores===1?"":"s"}`);else partes.push('✓ 0 errores pendientes');el.innerHTML=`<div class="alert warn">${partes.join("<br>")}</div>`}top.innerHTML='<span class="dot green"></span><span>Panel disponible</span>';const total=revisiones+errores;document.title=total?`(${total}) GoCargo / UES`:'GoCargo / UES — Torre de control'}catch{el.innerHTML='<div class="alert err">No se pudo consultar el estado</div>';top.innerHTML='<span class="dot red"></span><span>Sin conexión</span>'}}
 consultarConteo();
 document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
 
@@ -114,7 +114,7 @@ function renderDashboard(){
    metric("abiertos","Pedidos abiertos",m.abiertos||0),
    metric("entregadosHoy","Entregados hoy",m.entregadosHoy||0,"ok"),
    metric("revisionPendiente","Revisión pendiente",m.revisionPendiente||0,(m.revisionPendiente||0)?"warn":""),
-   metric("errores24h","Errores 24 h",m.errores24h||0,(m.errores24h||0)?"err":""),
+   metric("erroresPendientes","Errores pendientes",Number(m.erroresPendientes??m.errores24h??0),Number(m.erroresPendientes??m.errores24h??0)?"err":""),
    metric("webhooksHoy","Webhooks recibidos hoy",m.webhooksRecibidosHoy||0),
    metric("entregasSinPodHoy","Entregas sin POD",m.entregasSinPodHoy||0,(m.entregasSinPodHoy||0)?"warn":"")
  ].join("");
@@ -127,7 +127,7 @@ function renderDashboard(){
    const extra=key==="ues-poller"?'<br>Procesamiento: lotes de 15 hasta recorrer todos los pedidos elegibles':"";
    return `<div class="card health-card clickable-card" role="button" tabindex="0" onclick="abrirComponente('${key}','${esc(title)}','${esc(schedule)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirComponente('${key}','${esc(title)}','${esc(schedule)}')}"><div class="health-head"><span class="dot ${st.c}"></span>${title}<span class="badge ${st.c}">${st.t}</span></div><div class="health-meta">Última actividad: <b>${fmt(last)}</b><br>Programación: ${schedule}${extra}${key==="ues-webhook"&&DASHBOARD.ultimoWebhook?`<br>Último evento: <b>${esc(DASHBOARD.ultimoWebhook.evento_nombre||"—")}</b> · ${esc(DASHBOARD.ultimoWebhook.order_code||DASHBOARD.ultimoWebhook.tracking_number||"sin mapeo")}`:""}</div>${h?.last_error?`<div class="health-error" title="${esc(h.last_error)}">${esc(h.last_error)}</div>`:""}</div>`;
  }).join("");
- const warn=(m.revisionPendiente||0)>0||(m.errores24h||0)>0||(m.entregasSinPodHoy||0)>0;
+ const warn=(m.revisionPendiente||0)>0||Number(m.erroresPendientes??m.errores24h??0)>0||(m.entregasSinPodHoy||0)>0;
  document.getElementById("topStatus").innerHTML=anyRed?'<span class="dot red"></span><span>Requiere atención</span>':warn?'<span class="dot yellow"></span><span>Operativo con alertas</span>':'<span class="dot green"></span><span>Operativo</span>';
 }
 
@@ -232,9 +232,25 @@ function renderDetail(){
   const uesTimeline=`<section class="section"><div class="section-head"><h2>Línea de tiempo UES</h2><span class="count">${timelineEvents.length}</span></div><div class="card detail-card"><div class="timeline">${timelineEvents.length?timelineEvents.map(e=>`<div class="event"><div class="event-title">${esc(e.estado||"Evento")}</div><div class="event-sub">${esc(e.fecha||"")}${e.subestado?` · ${esc(e.subestado)}`:""}</div></div>`).join(""):'<div class="muted">Sin eventos disponibles.</div>'}</div></div></section>`;
 
   const procEvents=proc.map(e=>{const actionable=e.estado_procesamiento==="fallido"&&String(e.error||"").includes("Acción requerida:");return {kind:"procesado",date:e.processed_at||e.updated_at,title:actionable?`${e.estado||"Evento"} EN UES — acción requerida en SendGround`:e.estado,sub:e.subestado,source:e.source_first,status:e.estado_procesamiento,error:e.error,actionable};});
-  const manualEvents=manual.map(e=>({kind:"manual",date:e.created_at,title:e.action,sub:"",source:"manual",status:e.success?"procesado":"fallido",error:e.success?null:JSON.stringify(e.detail||{})}));
+  const manualEvents=manual.map(e=>{
+    const detalle=JSON.stringify(e.detail||{});
+    const timeout=!e.success&&/HttpTimeoutError|Timeout HTTP/i.test(detalle);
+    return {
+      kind:"manual",
+      date:e.created_at,
+      title:e.action,
+      sub:"",
+      source:"manual",
+      status:e.success?"procesado":timeout?"resultado no confirmado":"fallido",
+      error:e.success?null:timeout
+        ?"La Torre agotó el tiempo de espera, pero el poller puede haber continuado ejecutándose. Revisá los eventos posteriores para confirmar el resultado."
+        :detalle,
+      technicalError:!e.success&&timeout?detalle:null,
+      warning:timeout
+    };
+  });
   const allIntegration=[...procEvents,...manualEvents].sort((a,b)=>new Date(a.date||0)-new Date(b.date||0));
-  const intTimeline=`<section class="section"><div class="section-head"><h2>Procesamiento de integración</h2><span class="count">${allIntegration.length}</span></div><div class="card detail-card"><div class="timeline">${allIntegration.length?allIntegration.map(e=>`<div class="event"><div class="event-title">${esc(e.title||"Acción")} <span class="badge ${e.source==="webhook"?"green":e.source==="manual"?"yellow":"blue"}">${e.source==="webhook"?"Webhook":e.source==="manual"?"Manual":"Poller"}</span> <span class="badge ${e.status==="procesado"?"green":e.status==="fallido"?"red":"yellow"}">${esc(e.actionable?"Acción requerida":e.status)}</span></div><div class="event-sub">${fmt(e.date)}${e.sub?` · ${esc(e.sub)}`:""}</div>${e.error?`<div class="event-note" style="color:var(--red)">${esc(e.error)}</div>`:""}</div>`).join(""):'<div class="muted">Sin eventos registrados.</div>'}</div></div></section>`;
+  const intTimeline=`<section class="section"><div class="section-head"><h2>Procesamiento de integración</h2><span class="count">${allIntegration.length}</span></div><div class="card detail-card"><div class="timeline">${allIntegration.length?allIntegration.map(e=>`<div class="event"><div class="event-title">${esc(e.title||"Acción")} <span class="badge ${e.source==="webhook"?"green":e.source==="manual"?"yellow":"blue"}">${e.source==="webhook"?"Webhook":e.source==="manual"?"Manual":"Poller"}</span> <span class="badge ${e.status==="procesado"?"green":e.status==="fallido"?"red":"yellow"}">${esc(e.actionable?"Acción requerida":e.status)}</span></div><div class="event-sub">${fmt(e.date)}${e.sub?` · ${esc(e.sub)}`:""}</div>${e.error?`<div class="event-note" style="color:${e.warning?"var(--yellow)":"var(--red)"}">${esc(e.error)}</div>`:""}${e.technicalError?`<details style="margin-top:6px"><summary class="muted" style="cursor:pointer">Detalle técnico</summary><div class="event-note mono" style="margin-top:6px;color:var(--muted)">${esc(e.technicalError)}</div></details>`:""}</div>`).join(""):'<div class="muted">Sin eventos registrados.</div>'}</div></div></section>`;
 
   const rev=reviews.length?`<section class="section"><div class="section-head"><h2>Alertas pendientes</h2><span class="count">${reviews.length}</span></div>${reviews.map(r=>`<div class="alert warn"><b>${esc(r.evento)}</b><br>${esc(r.motivo)} <button class="btn secondary small" onclick="resolverCaso(${r.id},'${esc(d.orderCode)}')">Resolver</button></div>`).join("")}</section>`:"";
   const webhookAudit=wh.length?`<section class="section"><details><summary style="cursor:pointer;font-weight:800;color:var(--navy)">Webhooks recibidos (${wh.length})</summary><div class="timeline" style="margin-top:10px">${wh.map(w=>`<div class="event"><div class="event-title">${esc(w.evento_nombre||"Evento")} <span class="badge ${w.processing_ok===false?"red":w.processing_ok===true?"green":"yellow"}">${w.processing_ok===false?"Error":w.processing_ok===true?"OK":"Recibido"}</span></div><div class="event-sub">${fmt(w.received_at)} · ${esc(w.numero_guia||w.tracking_number||"")}</div>${w.processing_detail?`<div class="event-note">${esc(w.processing_detail)}</div>`:""}</div>`).join("")}</div></details></section>`:"";
