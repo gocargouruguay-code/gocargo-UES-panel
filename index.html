@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>GoCargo / UES — Torre de control</title>
+<title>GoCargo — Torre de control</title>
 <style>
 :root {
   --navy:#00275B; --blue:#0b5ea8; --bg:#f3f6fa; --card:#fff; --text:#172033;
@@ -26,7 +26,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:12p
 .health-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px;align-items:start}.health-card{padding:15px;min-width:0;align-self:start}.health-head{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--navy);flex-wrap:wrap}.health-meta{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.55;overflow-wrap:anywhere}.health-error{font-size:12px;color:var(--red);margin-top:7px;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;word-break:break-word;line-height:1.45}
 .section{margin-top:18px}.section-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}.section-head h2{font-size:17px;margin:0;color:var(--navy)}.section-head .count{font-size:11px;padding:3px 7px;background:#e7eef6;border-radius:999px;color:var(--navy);font-weight:800}
 .search-card{padding:14px;margin-bottom:18px}.search-row{display:flex;gap:8px}.search-row .input{font-size:15px}.search-results{display:grid;gap:7px;margin-top:10px}.search-result{border:1px solid var(--line);border-radius:9px;padding:10px 12px;cursor:pointer;display:flex;gap:12px;align-items:center;background:#fff}.search-result:hover{border-color:#aac1d8;background:#f9fbfd}.search-result .code{font-weight:850;color:var(--navy)}.drawer-list{display:grid;gap:8px}.drawer-list .search-result{width:100%}.drawer-summary{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-.filters{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;margin-bottom:10px}.queue{display:grid;gap:10px}.review{padding:14px;display:grid;grid-template-columns:170px 1fr auto;gap:14px;align-items:start}.review-code{font-weight:850;color:var(--navy);cursor:pointer}.review-event{font-size:12px;color:var(--muted);margin-top:4px}.review-motivo{font-size:13px;font-weight:650;color:#6b4b0b;line-height:1.45}.review-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.phone-row{display:flex;gap:6px;margin-top:9px;max-width:380px}.phone-row .input{padding:7px 9px;font-size:12px}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:8px;margin-bottom:10px}.queue{display:grid;gap:10px}.review{padding:14px;display:grid;grid-template-columns:170px 1fr auto;gap:14px;align-items:start}.review-code{font-weight:850;color:var(--navy);cursor:pointer}.review-event{font-size:12px;color:var(--muted);margin-top:4px}.review-motivo{font-size:13px;font-weight:650;color:#6b4b0b;line-height:1.45}.review-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.phone-row{display:flex;gap:6px;margin-top:9px;max-width:380px}.phone-row .input{padding:7px 9px;font-size:12px}
 .badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800}.badge.green{background:var(--green-bg);color:var(--green)}.badge.yellow{background:var(--yellow-bg);color:var(--yellow)}.badge.red{background:var(--red-bg);color:var(--red)}.badge.gray{background:#eef2f6;color:#64748b}.badge.blue{background:#eaf2fb;color:var(--blue)}
 .empty{text-align:center;color:var(--muted);padding:38px 10px}.footer-note{text-align:center;color:#94a3b8;font-size:11px;margin-top:22px}
 .modal-backdrop{position:fixed;inset:0;background:rgba(10,24,44,.46);z-index:50;display:flex;justify-content:flex-end}.drawer{width:min(780px,96vw);height:100%;background:#f7f9fc;overflow:auto;box-shadow:-8px 0 30px rgba(0,0,0,.16)}.drawer-head{position:sticky;top:0;background:white;border-bottom:1px solid var(--line);padding:17px 18px;z-index:2;display:flex;align-items:center;gap:10px}.drawer-head h2{margin:0;color:var(--navy);font-size:20px}.drawer-body{padding:16px}.close{margin-left:auto;background:#eef2f6;color:#334155;border:0;border-radius:9px;width:34px;height:34px;cursor:pointer;font-size:19px}
@@ -39,7 +39,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:12p
 </style>
 </head>
 <body>
-<div class="topbar"><div class="topbar-inner"><div class="brand">GoCargo <small>Integración UES</small></div><div class="spacer"></div><div id="topStatus" class="top-status"><span class="dot"></span><span>Verificando…</span></div></div></div>
+<div class="topbar"><div class="topbar-inner"><div class="brand">GoCargo <small>Integraciones UES + RyR</small></div><div class="spacer"></div><div id="topStatus" class="top-status"><span class="dot"></span><span>Verificando…</span></div></div></div>
 
 <div class="container">
   <div id="login" class="card">
@@ -54,8 +54,8 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:12p
 
   <main id="app" class="hidden">
     <div class="hero">
-      <div><h1>GoCargo / UES</h1><p>Estado operativo y revisión de pedidos en una sola pantalla.</p></div>
-      <div class="hero-actions"><button class="btn secondary" onclick="refrescarTodo()">↻ Actualizar</button><button class="btn secondary" onclick="probarUES()">Probar conexión UES</button></div>
+      <div><h1>GoCargo / Integraciones</h1><p>Estado operativo y revisión de UES + RyR en una sola pantalla.</p></div>
+      <div class="hero-actions"><button class="btn secondary" onclick="refrescarTodo()">↻ Actualizar</button><button class="btn secondary" onclick="probarConexiones()">Probar conexiones</button></div>
     </div>
 
     <div id="metrics" class="metrics"></div>
@@ -71,6 +71,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:12p
       <div class="filters">
         <input id="filterText" class="input" placeholder="Filtrar por orden, evento o motivo…" oninput="renderReviews()" />
         <select id="filterType" class="input" onchange="renderReviews()"><option value="all">Todos los motivos</option><option value="telefono">Teléfono</option><option value="transicion">Transición</option><option value="creacion">Creación / proxy</option><option value="regla">Sin regla</option><option value="otros">Otros</option></select>
+        <select id="filterProvider" class="input" onchange="renderReviews()"><option value="all">Todos los proveedores</option><option value="UES">UES</option><option value="RYR">RyR</option></select>
         <select id="filterAge" class="input" onchange="renderReviews()"><option value="all">Cualquier antigüedad</option><option value="green">Menos de 6 h</option><option value="yellow">6 a 24 h</option><option value="red">Más de 24 h</option></select>
         <button class="btn secondary" onclick="cargarReviews()">↻</button>
       </div>
@@ -84,11 +85,13 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:12p
 <div id="toast" class="toast hidden"></div>
 
 <script>
-const API_BASE = "https://fksbytkpdbcjbwakunpp.supabase.co/functions/v1/ues-admin";
+const API_BASE_UES = "https://fksbytkpdbcjbwakunpp.supabase.co/functions/v1/ues-admin";
+const API_BASE_RYR = "https://ruonmntlrtrtbmvzbnik.supabase.co/functions/v1/ryr-admin";
 let PASSWORD = "";
 let REVIEWS = [];
 let DASHBOARD = null;
 let CURRENT_DETAIL = null;
+let METRIC_ROWS = [];
 let autoTimer = null;
 
 const esc = (v) => String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
@@ -96,9 +99,24 @@ const fmt = (v) => { if(!v) return "—"; const d=new Date(v); return Number.isN
 const norm = (v) => String(v??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
 
 function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.remove("hidden");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.add("hidden"),2600)}
-async function api(action,{method="GET",body=null,query={}}={}){const qs=new URLSearchParams({action,...query});const res=await fetch(API_BASE+"?"+qs,{method,headers:{...(PASSWORD?{"X-Admin-Password":PASSWORD}:{}),...(body?{"Content-Type":"application/json"}:{})},body:body?JSON.stringify(body):null});let data;try{data=await res.json()}catch{data={error:`HTTP ${res.status}`}}if(!res.ok)throw Object.assign(new Error(data.error||`HTTP ${res.status}`),{status:res.status,data});return data}
+function apiBase(provider){return String(provider||"UES").toUpperCase()==="RYR"?API_BASE_RYR:API_BASE_UES}
+async function apiProvider(provider,action,{method="GET",body=null,query={}}={}){const qs=new URLSearchParams({action,...query});const res=await fetch(apiBase(provider)+"?"+qs,{method,headers:{...(PASSWORD?{"X-Admin-Password":PASSWORD}:{}),...(body?{"Content-Type":"application/json"}:{})},body:body?JSON.stringify(body):null});let data;try{data=await res.json()}catch{data={error:`HTTP ${res.status}`}}if(!res.ok)throw Object.assign(new Error(data.error||`HTTP ${res.status}`),{status:res.status,data,provider:String(provider||"UES").toUpperCase()});return data}
+const api=(action,opts={})=>apiProvider("UES",action,opts);
 
-async function consultarConteo(){const el=document.getElementById("countBadge"),top=document.getElementById("topStatus");try{const r=await api("count");const revisiones=Number(r.revisionPendiente??r.count??0),errores=Number(r.erroresPendientes??r.errores24h??0);if(revisiones===0&&errores===0){el.innerHTML='<div class="alert ok">✓ Sin revisiones pendientes ni errores activos</div>'}else{const partes=[];if(revisiones>0)partes.push(`⚠ ${revisiones} revisión${revisiones===1?"":"es"} pendiente${revisiones===1?"":"s"}`);else partes.push('✓ 0 revisiones pendientes');if(errores>0)partes.push(`⚠ ${errores} error${errores===1?"":"es"} pendiente${errores===1?"":"s"}`);else partes.push('✓ 0 errores pendientes');el.innerHTML=`<div class="alert warn">${partes.join("<br>")}</div>`}top.innerHTML='<span class="dot green"></span><span>Panel disponible</span>';const total=revisiones+errores;document.title=total?`(${total}) GoCargo / UES`:'GoCargo / UES — Torre de control'}catch{el.innerHTML='<div class="alert err">No se pudo consultar el estado</div>';top.innerHTML='<span class="dot red"></span><span>Sin conexión</span>'}}
+async function consultarConteo(){
+ const el=document.getElementById("countBadge"),top=document.getElementById("topStatus");
+ const [uesRes,ryrRes]=await Promise.allSettled([apiProvider("UES","count"),apiProvider("RYR","count")]);
+ if(uesRes.status==="rejected"&&ryrRes.status==="rejected"){el.innerHTML='<div class="alert err">No se pudo consultar el estado</div>';top.innerHTML='<span class="dot red"></span><span>Sin conexión</span>';return}
+ const u=uesRes.status==="fulfilled"?uesRes.value:{},r=ryrRes.status==="fulfilled"?ryrRes.value:{};
+ const uRev=Number(u.revisionPendiente??u.count??0),uErr=Number(u.erroresPendientes??u.errores24h??0),rRev=Number(r.revisionPendiente??r.count??0),rErr=Number(r.erroresPendientes??r.errores24h??0);
+ const revisiones=uRev+rRev,errores=uErr+rErr,total=revisiones+errores;
+ const estadoProveedores=`UES: ${uRev} revisión${uRev===1?"":"es"} / ${uErr} error${uErr===1?"":"es"} · RyR: ${rRev} revisión${rRev===1?"":"es"} / ${rErr} error${rErr===1?"":"es"}`;
+ if(total===0)el.innerHTML=`<div class="alert ok">✓ Sin revisiones pendientes ni errores activos<br><span style="font-size:11px">${estadoProveedores}</span></div>`;
+ else el.innerHTML=`<div class="alert warn">${revisiones?`⚠ ${revisiones} revisión${revisiones===1?"":"es"} pendiente${revisiones===1?"":"s"}`:'✓ 0 revisiones pendientes'}<br>${errores?`⚠ ${errores} error${errores===1?"":"es"} pendiente${errores===1?"":"s"}`:'✓ 0 errores pendientes'}<br><span style="font-size:11px">${estadoProveedores}</span></div>`;
+ const parcial=uesRes.status!=="fulfilled"||ryrRes.status!=="fulfilled";
+ top.innerHTML=parcial?'<span class="dot yellow"></span><span>Conexión parcial</span>':'<span class="dot green"></span><span>UES + RyR conectados</span>';
+ document.title=total?`(${total}) GoCargo — Torre de control`:'GoCargo — Torre de control';
+}
 consultarConteo();
 document.getElementById("password").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
 
@@ -107,7 +125,18 @@ async function login(){PASSWORD=document.getElementById("password").value;const 
 function componentState(h){if(!h)return {c:"gray",t:"Sin datos"};const err=h.last_error_at?new Date(h.last_error_at):null;const ok=h.last_success_at?new Date(h.last_success_at):null;if(err&&(!ok||err>ok))return {c:"red",t:"Error"};if(ok)return {c:"green",t:"Operativo"};return {c:"yellow",t:"Esperando primera ejecución"}}
 function metric(key,label,value,cls=""){return `<div class="card metric ${cls} clickable-card" role="button" tabindex="0" onclick="abrirMetrica('${esc(key)}','${esc(label)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirMetrica('${esc(key)}','${esc(label)}')}"><div class="value">${esc(value)}</div><div class="label">${esc(label)}</div></div>`}
 
-async function cargarDashboard(silent=false){try{DASHBOARD=await api("dashboard");renderDashboard()}catch(e){if(!silent)throw e;document.getElementById("topStatus").innerHTML='<span class="dot red"></span><span>Error de panel</span>'}}
+async function cargarDashboard(silent=false){
+ try{
+  const [uesRes,ryrRes]=await Promise.allSettled([apiProvider("UES","dashboard"),apiProvider("RYR","dashboard")]);
+  const authError=[uesRes,ryrRes].find(x=>x.status==="rejected"&&x.reason?.status===401);
+  if(authError)throw authError.reason;
+  if(uesRes.status==="rejected"&&ryrRes.status==="rejected")throw uesRes.reason||ryrRes.reason;
+  const u=uesRes.status==="fulfilled"?uesRes.value:{},r=ryrRes.status==="fulfilled"?ryrRes.value:{};
+  const um=u.metrics||{},rm=r.metrics||{};
+  DASHBOARD={...u,_providerStatus:{UES:uesRes.status==="fulfilled",RYR:ryrRes.status==="fulfilled"},_ryr:r,metrics:{...um,abiertos:Number(um.abiertos||0)+Number(rm.abiertos||0),revisionPendiente:Number(um.revisionPendiente||0)+Number(rm.revisionPendiente||0),erroresPendientes:Number(um.erroresPendientes??um.errores24h??0)+Number(rm.erroresPendientes??rm.errores24h??0),errores24h:Number(um.erroresPendientes??um.errores24h??0)+Number(rm.erroresPendientes??rm.errores24h??0)}};
+  renderDashboard();
+ }catch(e){if(!silent)throw e;document.getElementById("topStatus").innerHTML='<span class="dot red"></span><span>Error de panel</span>'}
+}
 function renderDashboard(){
  const m=DASHBOARD.metrics||{};
  document.getElementById("metrics").innerHTML=[
@@ -128,7 +157,9 @@ function renderDashboard(){
    return `<div class="card health-card clickable-card" role="button" tabindex="0" onclick="abrirComponente('${key}','${esc(title)}','${esc(schedule)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirComponente('${key}','${esc(title)}','${esc(schedule)}')}"><div class="health-head"><span class="dot ${st.c}"></span>${title}<span class="badge ${st.c}">${st.t}</span></div><div class="health-meta">Última actividad: <b>${fmt(last)}</b><br>Programación: ${schedule}${extra}${key==="ues-webhook"&&DASHBOARD.ultimoWebhook?`<br>Último evento: <b>${esc(DASHBOARD.ultimoWebhook.evento_nombre||"—")}</b> · ${esc(DASHBOARD.ultimoWebhook.order_code||DASHBOARD.ultimoWebhook.tracking_number||"sin mapeo")}`:""}</div>${h?.last_error?`<div class="health-error" title="${esc(h.last_error)}">${esc(h.last_error)}</div>`:""}</div>`;
  }).join("");
  const warn=(m.revisionPendiente||0)>0||Number(m.erroresPendientes??m.errores24h??0)>0||(m.entregasSinPodHoy||0)>0;
- document.getElementById("topStatus").innerHTML=anyRed?'<span class="dot red"></span><span>Requiere atención</span>':warn?'<span class="dot yellow"></span><span>Operativo con alertas</span>':'<span class="dot green"></span><span>Operativo</span>';
+ const providerStatus=DASHBOARD._providerStatus||{UES:true,RYR:true};
+ const parcial=!providerStatus.UES||!providerStatus.RYR;
+ document.getElementById("topStatus").innerHTML=anyRed?'<span class="dot red"></span><span>Requiere atención</span>':parcial?'<span class="dot yellow"></span><span>Conexión parcial UES / RyR</span>':warn?'<span class="dot yellow"></span><span>Operativo con alertas</span>':'<span class="dot green"></span><span>UES + RyR operativos</span>';
 }
 
 
@@ -142,31 +173,25 @@ function abrirModalBase(titulo,estadoHtml=""){
 function rowLookup(r){return r.query||r.order_code||r.tracking_number||r.numero_guia||r.guia_id||""}
 
 function renderListaMetrica(data){
- const rows=Array.isArray(data?.rows)?data.rows:[];
+ const rows=Array.isArray(data?.rows)?data.rows:[]; METRIC_ROWS=rows;
  const total=Number(data?.total??rows.length);
  document.getElementById("detailStatus").innerHTML=`<span class="badge blue">${esc(total)} registro${total===1?"":"s"}</span>`;
- if(!rows.length){
-   document.getElementById("detailBody").innerHTML='<div class="card empty">No hay registros para mostrar.</div>';
-   return;
- }
- const lista=rows.map(r=>{
-   const lookup=rowLookup(r);
-   const attrs=lookup?`onclick="abrirDetalle('${esc(lookup)}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){abrirDetalle('${esc(lookup)}')}"`:"";
-   return `<div class="search-result" ${attrs}><div><div class="code mono">${esc(r.code||lookup||"—")}</div><div style="font-size:12px;font-weight:750;margin-top:2px">${esc(r.title||"")}</div><div class="muted" style="font-size:11px;margin-top:2px">${esc(r.subtitle||"")}</div>${r.date?`<div class="muted" style="font-size:11px;margin-top:2px">${fmt(r.date)}</div>`:""}</div><div class="spacer"></div>${r.badge?`<span class="badge ${esc(r.badgeClass||"blue")}">${esc(r.badge)}</span>`:""}</div>`;
- }).join("");
- document.getElementById("detailBody").innerHTML=`<div class="drawer-summary"><span class="muted">Hacé clic en un registro para abrir el detalle completo.</span></div><div class="drawer-list">${lista}</div>`;
+ if(!rows.length){document.getElementById("detailBody").innerHTML='<div class="card empty">No hay registros para mostrar.</div>';return}
+ const lista=rows.map((r,i)=>{const provider=String(r.provider||"UES").toUpperCase();const lookup=rowLookup(r);const attrs=lookup?`onclick="abrirRegistroMetrica(${i})" role="button" tabindex="0" onkeydown="if(event.key==='Enter'){abrirRegistroMetrica(${i})}"`:"";const pcls=provider==="RYR"?"green":"blue";return `<div class="search-result" ${attrs}><div><div><span class="badge ${pcls}">${provider}</span> <span class="code mono">${esc(r.code||lookup||"—")}</span></div><div style="font-size:12px;font-weight:750;margin-top:5px">${esc(r.title||"")}</div><div class="muted" style="font-size:11px;margin-top:2px">${esc(r.subtitle||"")}</div>${r.ryrOrderCode?`<div class="muted mono" style="font-size:11px;margin-top:2px">RyR: ${esc(r.ryrOrderCode)}</div>`:""}${r.date?`<div class="muted" style="font-size:11px;margin-top:2px">${fmt(r.date)}</div>`:""}</div><div class="spacer"></div>${r.badge?`<span class="badge ${esc(r.badgeClass||"blue")}">${esc(r.badge)}</span>`:""}</div>`}).join("");
+ document.getElementById("detailBody").innerHTML=`<div class="drawer-summary"><span class="muted">UES abre el detalle completo; RyR muestra el detalle de la alerta.</span></div><div class="drawer-list">${lista}</div>`;
 }
-
+function abrirRegistroMetrica(i){const r=METRIC_ROWS[i];if(!r)return;String(r.provider||"UES").toUpperCase()==="RYR"?abrirDetalleRyr(r):abrirDetalle(rowLookup(r))}
+function abrirDetalleRyr(r){CURRENT_DETAIL={provider:"RYR",row:r};abrirModalBase(r.code||r.query||"Alerta RyR",`<span class="badge green">RYR</span>`);const resolvable=r.source_type==="revision"||r.resolvable===true;document.getElementById("detailBody").innerHTML=`<div class="card detail-card"><div class="detail-title">Alerta RyR</div><div class="kv"><div class="k">Orden GoCargo</div><div class="v mono">${esc(r.code||r.order_code||r.query||"—")}</div><div class="k">Orden RyR</div><div class="v mono">${esc(r.ryrOrderCode||r.ryr_order_code||"—")}</div><div class="k">Etapa</div><div class="v">${esc(r.title||r.evento||"—")}</div><div class="k">Fecha</div><div class="v">${fmt(r.date||r.created_at)}</div></div><div class="alert ${r.source_type==="error"?"err":"warn"}" style="margin-top:12px">${esc(r.subtitle||r.motivo||"")}</div>${resolvable?`<button class="btn secondary small" style="margin-top:12px" onclick="resolverCaso('RYR',${Number(r.source_id||r.id||0)},'${esc(r.code||r.order_code||r.query||"")}')">Marcar resuelto</button>`:'<div class="muted" style="font-size:11px;margin-top:12px">Este error se elimina automáticamente cuando el poller vuelve a sincronizar correctamente.</div>'}</div>`}
 async function abrirMetrica(kind,label){
- abrirModalBase(label,'<span class="badge gray">Cargando…</span>');
- document.getElementById("detailBody").innerHTML='<div class="empty">Consultando registros…</div>';
+ abrirModalBase(label,'<span class="badge gray">Cargando…</span>');document.getElementById("detailBody").innerHTML='<div class="empty">Consultando registros…</div>';
  try{
-   const data=await api("dashboard-list",{query:{kind}});
-   renderListaMetrica(data);
- }catch(e){
-   document.getElementById("detailStatus").innerHTML='<span class="badge red">Error</span>';
-   document.getElementById("detailBody").innerHTML=`<div class="alert err">${esc(e.message)}</div>`;
- }
+  if(kind==="revisionPendiente"||kind==="erroresPendientes"||kind==="errores24h"){
+   const [u,r]=await Promise.allSettled([apiProvider("UES","dashboard-list",{query:{kind}}),apiProvider("RYR","dashboard-list",{query:{kind}})]);
+   if(u.status==="rejected"&&r.status==="rejected")throw u.reason||r.reason;
+   const ur=u.status==="fulfilled"?(u.value.rows||[]).map(x=>({...x,provider:x.provider||"UES"})):[];const rr=r.status==="fulfilled"?(r.value.rows||[]):[];renderListaMetrica({total:ur.length+rr.length,rows:[...ur,...rr].sort((a,b)=>new Date(b.date||0)-new Date(a.date||0))});return;
+  }
+  renderListaMetrica(await apiProvider("UES","dashboard-list",{query:{kind}}));
+ }catch(e){document.getElementById("detailStatus").innerHTML='<span class="badge red">Error</span>';document.getElementById("detailBody").innerHTML=`<div class="alert err">${esc(e.message)}</div>`}
 }
 
 function abrirComponente(key,title,schedule){
@@ -181,11 +206,17 @@ function abrirComponente(key,title,schedule){
  document.getElementById("detailBody").innerHTML=`<div class="detail-grid"><div class="card detail-card"><div class="detail-title">Estado</div><div class="kv"><div class="k">Componente</div><div class="v mono">${esc(key)}</div><div class="k">Programación</div><div class="v">${esc(schedule)}</div><div class="k">Última actividad</div><div class="v">${fmt(last)}</div><div class="k">Último inicio</div><div class="v">${fmt(h?.last_started_at)}</div><div class="k">Último éxito</div><div class="v">${fmt(h?.last_success_at)}</div><div class="k">Último error</div><div class="v">${fmt(h?.last_error_at)}</div></div></div></div>${h?.last_error?`<div class="alert err"><b>Último error:</b><br>${esc(h.last_error)}</div>`:""}${webhookExtra}${result}`;
 }
 
-async function cargarReviews(silent=false){const el=document.getElementById("reviewList");if(!silent)el.innerHTML='<div class="empty">Cargando…</div>';try{REVIEWS=await api("list");renderReviews();document.getElementById("reviewCount").textContent=REVIEWS.length;consultarConteo()}catch(e){if(!silent)el.innerHTML=`<div class="alert err">${esc(e.message)}</div>`}}
+async function cargarReviews(silent=false){const el=document.getElementById("reviewList");if(!silent)el.innerHTML='<div class="empty">Cargando…</div>';try{const [u,r]=await Promise.allSettled([apiProvider("UES","list"),apiProvider("RYR","list")]);if(u.status==="rejected"&&r.status==="rejected")throw u.reason||r.reason;const ur=u.status==="fulfilled"?(Array.isArray(u.value)?u.value:[]).map(x=>({...x,provider:"UES",source_type:x.source_type||"revision",resolvable:true})):[];const rr=r.status==="fulfilled"?(Array.isArray(r.value)?r.value:[]):[];REVIEWS=[...ur,...rr].sort((a,b)=>new Date(a.created_at||0)-new Date(b.created_at||0));renderReviews();document.getElementById("reviewCount").textContent=REVIEWS.length;consultarConteo()}catch(e){if(!silent)el.innerHTML=`<div class="alert err">${esc(e.message)}</div>`}}
 function ageClass(date){const h=(Date.now()-new Date(date).getTime())/36e5;if(h<6)return "green";if(h<24)return "yellow";return "red"}
 function ageText(date){const h=Math.max(0,(Date.now()-new Date(date).getTime())/36e5);return h<1?`${Math.round(h*60)} min`:h<24?`${Math.round(h)} h`:`${Math.floor(h/24)} d ${Math.round(h%24)} h`}
 function motiveType(m){const s=norm(m);if(s.includes("telefono"))return"telefono";if(s.includes("transicion")||s.includes("switchable")||s.includes("status"))return"transicion";if(s.includes("proxy")||s.includes("creacion")||s.includes("guia"))return"creacion";if(s.includes("regla automatica")||s.includes("sin regla"))return"regla";return"otros"}
-function renderReviews(){const text=norm(document.getElementById("filterText")?.value);const type=document.getElementById("filterType")?.value||"all";const age=document.getElementById("filterAge")?.value||"all";const rows=REVIEWS.filter(r=>(!text||norm(`${r.order_code} ${r.evento} ${r.motivo}`).includes(text))&&(type==="all"||motiveType(r.motivo)===type)&&(age==="all"||ageClass(r.created_at)===age));const el=document.getElementById("reviewList");if(!rows.length){el.innerHTML='<div class="card empty">No hay casos con esos filtros.</div>';return}el.innerHTML=rows.map(r=>{const ageC=ageClass(r.created_at), phone=motiveType(r.motivo)==="telefono";return `<div class="card review" id="review-${r.id}"><div><div class="review-code mono" onclick="abrirDetalle('${esc(r.order_code)}')">${esc(r.order_code)}</div><div class="review-event">${esc(r.evento||"Revisión manual")}</div><div style="margin-top:7px"><span class="badge ${ageC}">${ageText(r.created_at)}</span></div></div><div><div class="review-motivo">${esc(r.motivo)}</div><div class="muted" style="font-size:11px;margin-top:5px">Creado: ${fmt(r.created_at)}</div>${phone?`<div class="phone-row"><input class="input" id="tel-${r.id}" placeholder="099123123"><button class="btn primary small" onclick="completarTelefono(${r.id})">Completar y crear</button></div>`:""}<div id="msg-${r.id}"></div></div><div class="review-actions"><button class="btn secondary small" onclick="abrirDetalle('${esc(r.order_code)}')">Ver detalle</button><button class="btn secondary small" onclick="resolverCaso(${r.id},'${esc(r.order_code)}')">Marcar resuelto</button></div></div>`}).join("")}
+function renderReviews(){
+ const text=norm(document.getElementById("filterText")?.value),type=document.getElementById("filterType")?.value||"all",providerFilter=document.getElementById("filterProvider")?.value||"all",age=document.getElementById("filterAge")?.value||"all";
+ const rows=REVIEWS.filter(r=>{const provider=String(r.provider||"UES").toUpperCase();return(!text||norm(`${provider} ${r.order_code} ${r.ryr_order_code||""} ${r.evento} ${r.motivo}`).includes(text))&&(type==="all"||motiveType(r.motivo)===type)&&(providerFilter==="all"||provider===providerFilter)&&(age==="all"||ageClass(r.created_at)===age)});
+ const el=document.getElementById("reviewList");if(!rows.length){el.innerHTML='<div class="card empty">No hay casos con esos filtros.</div>';return}
+ el.innerHTML=rows.map(r=>{const provider=String(r.provider||"UES").toUpperCase(),pcls=provider==="RYR"?"green":"blue",key=`${provider.toLowerCase()}-${r.id}`,ageC=ageClass(r.created_at),phone=motiveType(r.motivo)==="telefono",uesPhone=phone&&provider==="UES",ryrPhone=phone&&provider==="RYR",resolvable=r.resolvable!==false;const open=provider==="RYR"?`abrirReviewRyr('${key}')`:`abrirDetalle('${esc(r.order_code)}')`;return `<div class="card review" id="review-${key}"><div><div><span class="badge ${pcls}">${provider}</span></div><div class="review-code mono" style="margin-top:7px" onclick="${open}">${esc(r.order_code)}</div>${r.ryr_order_code?`<div class="muted mono" style="font-size:11px;margin-top:3px">RyR: ${esc(r.ryr_order_code)}</div>`:""}<div class="review-event">${esc(r.evento||"Revisión manual")}</div><div style="margin-top:7px"><span class="badge ${ageC}">${ageText(r.created_at)}</span></div></div><div><div class="review-motivo">${esc(r.motivo)}</div><div class="muted" style="font-size:11px;margin-top:5px">Creado: ${fmt(r.created_at)}</div>${uesPhone?`<div class="phone-row"><input class="input" id="tel-${r.id}" placeholder="099123123"><button class="btn primary small" onclick="completarTelefono(${r.id})">Completar y crear</button></div>`:""}${ryrPhone?'<div class="alert warn" style="margin-top:9px">Corregí el teléfono en SendGround. El proxy RyR volverá a intentar automáticamente en la próxima corrida.</div>':""}<div id="msg-${key}"></div></div><div class="review-actions"><button class="btn secondary small" onclick="${open}">Ver detalle</button>${resolvable?`<button class="btn secondary small" onclick="resolverCaso('${provider}',${r.id},'${esc(r.order_code)}')">Marcar resuelto</button>`:'<span class="badge red">Se resuelve automáticamente</span>'}</div></div>`}).join("")
+}
+function abrirReviewRyr(key){const [provider,id]=String(key).split("-");const r=REVIEWS.find(x=>String(x.provider||"UES").toLowerCase()===provider&&String(x.id)===id);if(r)abrirDetalleRyr({provider:"RYR",source_type:r.source_type,source_id:r.id,code:r.order_code,ryrOrderCode:r.ryr_order_code,title:r.evento,subtitle:r.motivo,date:r.updated_at||r.created_at,resolvable:r.resolvable})}
 
 async function buscarGlobal(){
   const q=document.getElementById("globalSearch").value.trim(),el=document.getElementById("searchResults");
@@ -252,18 +283,18 @@ function renderDetail(){
   const allIntegration=[...procEvents,...manualEvents].sort((a,b)=>new Date(a.date||0)-new Date(b.date||0));
   const intTimeline=`<section class="section"><div class="section-head"><h2>Procesamiento de integración</h2><span class="count">${allIntegration.length}</span></div><div class="card detail-card"><div class="timeline">${allIntegration.length?allIntegration.map(e=>`<div class="event"><div class="event-title">${esc(e.title||"Acción")} <span class="badge ${e.source==="webhook"?"green":e.source==="manual"?"yellow":"blue"}">${e.source==="webhook"?"Webhook":e.source==="manual"?"Manual":"Poller"}</span> <span class="badge ${e.status==="procesado"?"green":e.status==="fallido"?"red":"yellow"}">${esc(e.actionable?"Acción requerida":e.status)}</span></div><div class="event-sub">${fmt(e.date)}${e.sub?` · ${esc(e.sub)}`:""}</div>${e.error?`<div class="event-note" style="color:${e.warning?"var(--yellow)":"var(--red)"}">${esc(e.error)}</div>`:""}${e.technicalError?`<details style="margin-top:6px"><summary class="muted" style="cursor:pointer">Detalle técnico</summary><div class="event-note mono" style="margin-top:6px;color:var(--muted)">${esc(e.technicalError)}</div></details>`:""}</div>`).join(""):'<div class="muted">Sin eventos registrados.</div>'}</div></div></section>`;
 
-  const rev=reviews.length?`<section class="section"><div class="section-head"><h2>Alertas pendientes</h2><span class="count">${reviews.length}</span></div>${reviews.map(r=>`<div class="alert warn"><b>${esc(r.evento)}</b><br>${esc(r.motivo)} <button class="btn secondary small" onclick="resolverCaso(${r.id},'${esc(d.orderCode)}')">Resolver</button></div>`).join("")}</section>`:"";
+  const rev=reviews.length?`<section class="section"><div class="section-head"><h2>Alertas pendientes</h2><span class="count">${reviews.length}</span></div>${reviews.map(r=>`<div class="alert warn"><b>${esc(r.evento)}</b><br>${esc(r.motivo)} <button class="btn secondary small" onclick="resolverCaso('UES',${r.id},'${esc(d.orderCode)}')">Resolver</button></div>`).join("")}</section>`:"";
   const webhookAudit=wh.length?`<section class="section"><details><summary style="cursor:pointer;font-weight:800;color:var(--navy)">Webhooks recibidos (${wh.length})</summary><div class="timeline" style="margin-top:10px">${wh.map(w=>`<div class="event"><div class="event-title">${esc(w.evento_nombre||"Evento")} <span class="badge ${w.processing_ok===false?"red":w.processing_ok===true?"green":"yellow"}">${w.processing_ok===false?"Error":w.processing_ok===true?"OK":"Recibido"}</span></div><div class="event-sub">${fmt(w.received_at)} · ${esc(w.numero_guia||w.tracking_number||"")}</div>${w.processing_detail?`<div class="event-note">${esc(w.processing_detail)}</div>`:""}</div>`).join("")}</div></details></section>`:"";
   const warnings=(d.warnings||[]).length?`<div class="alert warn"><b>Diagnóstico parcial:</b><br>${d.warnings.map(esc).join("<br>")}</div>`:"";
   const raw=`<section class="section"><details><summary style="cursor:pointer;font-weight:800;color:var(--navy)">Detalles técnicos / JSON</summary><pre class="json-box">${esc(JSON.stringify(d,null,2))}</pre></details></section>`;
   document.getElementById("detailBody").innerHTML=actions+standaloneBanner+warnings+cards+podBox+rev+uesTimeline+intTimeline+webhookAudit+raw;
 }
 
-async function resolverCaso(id,orderCode){if(!confirm(`¿Marcar esta alerta de ${orderCode} como resuelta?`))return;try{await api("resolve",{method:"POST",body:{id}});toast("Alerta resuelta");await cargarReviews();if(CURRENT_DETAIL?.orderCode===orderCode)abrirDetalle(orderCode);cargarDashboard(true)}catch(e){toast(e.message)}}
+async function resolverCaso(provider,id,orderCode){provider=String(provider||"UES").toUpperCase();if(!confirm(`¿Marcar esta alerta ${provider} de ${orderCode} como resuelta?`))return;try{await apiProvider(provider,"resolve",{method:"POST",body:{id}});toast(`Alerta ${provider} resuelta`);await cargarReviews();if(provider==="UES"&&CURRENT_DETAIL?.orderCode===orderCode)abrirDetalle(orderCode);else if(provider==="RYR"&&CURRENT_DETAIL?.provider==="RYR")cerrarDetalle();cargarDashboard(true)}catch(e){toast(e.message)}}
 async function resolverOrden(orderCode){if(!confirm(`¿Marcar TODAS las alertas pendientes de ${orderCode} como resueltas?`))return;try{await api("resolve",{method:"POST",body:{order_code:orderCode}});toast("Alertas resueltas");await cargarReviews();abrirDetalle(orderCode);cargarDashboard(true)}catch(e){toast(e.message)}}
 async function completarTelefono(id){const input=document.getElementById(`tel-${id}`),msg=document.getElementById(`msg-${id}`),telefono=input?.value.trim();if(!telefono){toast("Ingresá un teléfono");return}msg.innerHTML='<div class="alert warn">Procesando…</div>';try{const r=await api("complete",{method:"POST",body:{id,telefono}});msg.innerHTML=`<div class="alert ok">✓ ${esc(r.trackingNumber||r.detalle||"Completado")}${r.warning?`<br>⚠ ${esc(r.warning)}`:""}</div>`;setTimeout(()=>{cargarReviews();cargarDashboard(true)},900)}catch(e){msg.innerHTML=`<div class="alert err">${esc(e.message)}</div>`}}
 async function reprocesar(orderCode){if(!confirm(`Esto ejecutará el poller AHORA solo para ${orderCode}. ¿Continuar?`))return;toast("Reprocesando…");try{const r=await api("reprocess",{method:"POST",body:{order_code:orderCode}});toast(r.ok?"Reproceso terminado":"Reproceso devolvió error");await abrirDetalle(orderCode);cargarReviews();cargarDashboard(true)}catch(e){toast(e.message)}}
-async function probarUES(){toast("Probando conexión…");try{const r=await api("health");toast(`UES OK · ${r.catalogo?.departamentos||0} departamentos · ${r.servicios?.length||0} servicios`)}catch(e){toast(`Error UES: ${e.message}`)}}
+async function probarConexiones(){toast("Probando conexiones…");const [u,r]=await Promise.allSettled([apiProvider("UES","health"),apiProvider("RYR","dashboard")]);const partes=[];partes.push(u.status==="fulfilled"?`UES OK · ${u.value.catalogo?.departamentos||0} departamentos`:`UES ERROR: ${u.reason?.message||"sin respuesta"}`);partes.push(r.status==="fulfilled"?"RyR OK":`RyR ERROR: ${r.reason?.message||"sin respuesta"}`);toast(partes.join(" · "))}
 function copiar(v){navigator.clipboard?.writeText(v);toast("Copiado: "+v)}
 function abrirSendGround(orderCode,url){copiar(orderCode);window.open(url||"https://app.sendground.com/pedidos","_blank","noopener")}
 async function refrescarTodo(){await Promise.all([cargarDashboard(true),cargarReviews()]);toast("Panel actualizado")}
